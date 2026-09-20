@@ -44,11 +44,7 @@ create_feedback_table()
 
 @app.route("/")
 def home():
-    return jsonify({
-        "message": "QueueLess backend is running!",
-        "project": "QueueLess",
-        "status": "success"
-    })
+    return send_from_directory(PROJECT_DIR, "index.html")
 
 
 # =========================================================

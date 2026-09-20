@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>QueueLess - Student Registration</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background:
+                radial-gradient(circle at top left, #1b1b1b, #050505 45%),
+                #050505;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 25px;
+        }
+
+        .register-box {
+            width: 100%;
+            max-width: 500px;
+            padding: 40px;
+            border-radius: 25px;
+            background: linear-gradient(145deg, #151515, #080808);
+            border: 1px solid #333;
+            box-shadow:
+                0 25px 60px rgba(0, 0, 0, 0.8),
+                inset 0 1px 1px rgba(255, 255, 255, 0.08);
+        }
+
+        .logo {
+            text-align: center;
+            font-size: 38px;
+            font-weight: 800;
+            letter-spacing: 2px;
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #aaa;
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #ddd;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        input {
+            width: 100%;
+            padding: 14px 16px;
+            border-radius: 12px;
+            border: 1px solid #333;
+            outline: none;
+            background: #0c0c0c;
+            color: white;
+            font-size: 15px;
+            box-shadow:
+                inset 0 3px 8px rgba(0, 0, 0, 0.7),
+                0 2px 5px rgba(255, 255, 255, 0.03);
+            transition: 0.25s;
+        }
+
+        input:focus {
+            border-color: white;
+            box-shadow:
+                0 0 12px rgba(255, 255, 255, 0.18),
+                inset 0 3px 8px rgba(0, 0, 0, 0.7);
+        }
+
+        input::placeholder {
+            color: #666;
+        }
+
+        .register-btn {
+            width: 100%;
+            margin-top: 10px;
+            padding: 15px;
+            border: none;
+            border-radius: 13px;
+            background: white;
+            color: black;
+            font-size: 16px;
+            font-weight: 800;
+            cursor: pointer;
+            transition: 0.25s;
+            box-shadow: 0 8px 20px rgba(255, 255, 255, 0.12);
+        }
+
+        .register-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 30px rgba(255, 255, 255, 0.25);
+        }
+
+        .register-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .message {
+            display: none;
+            margin-top: 18px;
+            padding: 12px;
+            border-radius: 10px;
+            text-align: center;
+            font-size: 14px;
+        }
+
+        .success {
+            display: block;
+            background: rgba(0, 255, 120, 0.08);
+            border: 1px solid rgba(0, 255, 120, 0.4);
+            color: #7dffb2;
+        }
+
+        .error {
+            display: block;
+            background: rgba(255, 60, 60, 0.08);
+            border: 1px solid rgba(255, 60, 60, 0.4);
+            color: #ff8585;
+        }
+
+        .login-link {
+            text-align: center;
+            margin-top: 25px;
+            color: #999;
+            font-size: 14px;
+        }
+
+        .login-link a {
+            color: white;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        .login-link a:hover {
+            text-decoration: underline;
+        }
+
+        .back {
+            text-align: center;
+            margin-top: 15px;
+        }
+
+        .back a {
+            color: #777;
+            text-decoration: none;
+            font-size: 13px;
+        }
+
+        .back a:hover {
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="register-box">
+
+        <div class="logo">QueueLess</div>
+
+        <div class="subtitle">
+            Create your student account
+        </div>
+
+        <form id="registerForm">
+
+            <div class="form-group">
+                <label for="fullName">Full Name</label>
+                <input
+                    type="text"
+                    id="fullName"
+                    placeholder="Enter your full name"
+                    required
+                >
+            </div>
+
+            <div class="form-group">
+                <label for="collegeId">College ID</label>
+                <input
+                    type="text"
+                    id="collegeId"
+                    placeholder="Enter your college ID"
+                    required
+                >
+            </div>
+
+            <div class="form-group">
+                <label for="collegeName">College Name</label>
+                <input
+                    type="text"
+                    id="collegeName"
+                    placeholder="Enter your college name"
+                    required
+                >
+            </div>
+
+            <div class="form-group">
+                <label for="collegeLocation">College Location</label>
+                <input
+                    type="text"
+                    id="collegeLocation"
+                    placeholder="Enter college location"
+                    required
+                >
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input
+                    type="password"
+                    id="password"
+                    placeholder="Create a password"
+                    minlength="4"
+                    required
+                >
+            </div>
+
+            <div class="form-group">
+                <label for="confirmPassword">Confirm Password</label>
+                <input
+                    type="password"
+                    id="confirmPassword"
+                    placeholder="Confirm your password"
+                    minlength="4"
+                    required
+                >
+            </div>
+
+            <button
+                type="submit"
+                class="register-btn"
+                id="registerBtn"
+            >
+                Create Student Account
+            </button>
+
+        </form>
+
+        <div id="message" class="message"></div>
+
+        <div class="login-link">
+            Already registered?
+            <a href="student-login.html">Login here</a>
+        </div>
+
+        <div class="back">
+            <a href="index.html">← Back to QueueLess</a>
+        </div>
+
+    </div>
+
+    <script src="register.js"></script>
+
+</body>
+</html>

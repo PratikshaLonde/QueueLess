@@ -1,0 +1,1981 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>QueueLess - Admin Dashboard</title>
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+
+html,body{
+    min-height:100%;
+    font-family:Arial,Helvetica,sans-serif;
+    background:#050505;
+    color:#fff;
+}
+
+button{font-family:inherit}
+
+body{
+    background:radial-gradient(circle at top right,#151b1f,#060707 45%,#020202);
+}
+
+.top-bar{
+    height:80px;
+    padding:0 35px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    border-bottom:1px solid #1b1b1b;
+    background:rgba(4,4,4,.92);
+    position:sticky;
+    top:0;
+    z-index:50;
+}
+
+.logo{
+    font-size:25px;
+    font-weight:bold;
+    letter-spacing:5px;
+}
+
+.menu-area{position:relative}
+
+.menu-button{
+    width:48px;
+    height:48px;
+    border:1px solid #292929;
+    border-radius:14px;
+    color:#fff;
+    background:#0b0b0b;
+    cursor:pointer;
+    box-shadow:5px 5px 12px #000,-3px -3px 8px rgba(255,255,255,.04);
+}
+
+.dropdown-menu{
+    position:absolute;
+    top:60px;
+    right:0;
+    display:none;
+    padding:8px;
+    background:#111;
+    border:1px solid #292929;
+    border-radius:12px;
+    box-shadow:10px 10px 25px #000;
+}
+
+.dropdown-menu.show{display:block}
+
+.dropdown-menu button{
+    border:0;
+    background:transparent;
+    color:#fff;
+    padding:12px 25px;
+    cursor:pointer;
+}
+
+.dashboard{
+    width:min(1450px,94%);
+    margin:auto;
+    padding:45px 0 90px;
+}
+
+.welcome{margin-bottom:28px}
+
+.small-title{
+    color:#666;
+    font-size:11px;
+    letter-spacing:4px;
+    margin-bottom:10px;
+}
+
+.welcome h1{
+    font-size:clamp(35px,5vw,60px);
+}
+
+.welcome p:last-child{
+    color:#777;
+    margin-top:10px;
+}
+
+/* MAIN EXACT TWO-SIDE FORMAT */
+
+.main-layout{
+    display:grid;
+    grid-template-columns:1fr;
+    gap:24px;
+    align-items:stretch;
+}
+
+.panel{
+    background:linear-gradient(145deg,#121212,#070707);
+    border:1px solid #292929;
+    border-radius:24px;
+    box-shadow:12px 12px 28px #000,-5px -5px 15px rgba(255,255,255,.025);
+}
+
+.main-panel{padding:28px}
+
+.panel-head{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:22px;
+}
+
+.panel-head h2,
+.side-head h3{
+    font-size:24px;
+}
+
+.panel-head p{
+    color:#666;
+    font-size:12px;
+    margin-top:7px;
+}
+
+/* COLLEGE SERVICES */
+
+.services-grid{
+    display:grid;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:18px;
+}
+
+.service-card{
+    padding:22px;
+    min-height:345px;
+    border:1px solid #292929;
+    border-radius:20px;
+    background:linear-gradient(145deg,#181818,#080808);
+    box-shadow:8px 8px 18px #000,-3px -3px 10px rgba(255,255,255,.025);
+    transition:.25s;
+}
+
+.service-card:hover{
+    transform:translateY(-4px);
+    border-color:#555;
+}
+
+.service-card h3{
+    font-size:19px;
+    margin-bottom:9px;
+}
+
+.desc{
+    font-size:12px;
+    color:#666;
+    margin-bottom:16px;
+}
+
+.status{
+    display:inline-block;
+    font-size:10px;
+    letter-spacing:2px;
+    padding:6px 10px;
+    border-radius:15px;
+    margin-bottom:17px;
+}
+
+.open{
+    background:#132319;
+    color:#8be09a;
+}
+
+.paused{
+    background:#342c09;
+    color:#e5cb62;
+}
+
+.closed{
+    background:#321515;
+    color:#ed8585;
+}
+
+.info{display:grid;gap:8px}
+
+.row{
+    display:flex;
+    justify-content:space-between;
+    gap:10px;
+    padding:10px 11px;
+    border-radius:10px;
+    background:#111;
+    border:1px solid #1d1d1d;
+    font-size:12px;
+}
+
+.row span{color:#777}
+
+.row strong{font-size:13px}
+
+.waiting{color:#e6c65b}
+.serving{color:#9fc9ef}
+.next{color:#9ee0ab}
+.completed{color:#9ee0ab}
+
+.buttons{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:8px;
+    margin-top:15px;
+}
+
+.buttons button{
+    height:38px;
+    border-radius:10px;
+    border:1px solid #333;
+    background:#0b0b0b;
+    color:#fff;
+    cursor:pointer;
+    font-size:11px;
+}
+
+.buttons button:disabled{
+    opacity:.35;
+    cursor:not-allowed;
+}
+
+.next-btn{border-color:#416b91!important}
+.complete-btn{border-color:#3e714b!important}
+.pause-btn{border-color:#75652c!important}
+.close-btn{border-color:#713737!important}
+.resume-btn,.open-btn{border-color:#456d4e!important}
+
+/* RIGHT SIDE */
+
+.right-side{
+    display:grid;
+    grid-template-rows:1fr;
+    gap:18px;
+    min-height:100%;
+}
+
+/* DAILY ACTIVITY */
+
+.side-card{
+    padding:21px;
+}
+
+.side-head{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:15px;
+}
+
+.side-head h3{font-size:20px}
+
+.activity-controls{
+    display:flex;
+    gap:7px;
+}
+
+.activity-btn{
+    border:1px solid #333;
+    background:#0b0b0b;
+    color:#aaa;
+    border-radius:9px;
+    padding:7px 12px;
+    cursor:pointer;
+    font-size:11px;
+}
+
+.activity-btn.active{
+    color:#fff;
+    border-color:#666;
+    background:#181818;
+}
+
+.activity-list{
+    display:grid;
+    gap:10px;
+    max-height:340px;
+    overflow:auto;
+}
+
+.activity-item{
+    padding:13px;
+    border:1px solid #222;
+    border-radius:14px;
+    background:#0d0d0d;
+    display:flex;
+    justify-content:space-between;
+    gap:12px;
+}
+
+.activity-item strong{font-size:12px}
+
+.activity-item p{
+    font-size:11px;
+    color:#777;
+    line-height:1.45;
+    margin-top:5px;
+}
+
+.activity-count{
+    color:#9ee0ab;
+    font-weight:bold;
+    white-space:nowrap;
+}
+
+.empty{
+    color:#666;
+    font-size:12px;
+    padding:12px 0;
+}
+
+/* PREVIOUS */
+
+.previous-list{
+    display:grid;
+    gap:12px;
+    max-height:380px;
+    overflow:auto;
+}
+
+.day-block{
+    border:1px solid #222;
+    border-radius:14px;
+    overflow:hidden;
+    background:#0d0d0d;
+}
+
+.day-title{
+    padding:11px 13px;
+    background:#151515;
+    color:#aaa;
+    font-size:12px;
+    font-weight:bold;
+}
+
+.day-row{
+    display:flex;
+    justify-content:space-between;
+    gap:10px;
+    padding:9px 13px;
+    border-top:1px solid #1e1e1e;
+    font-size:11px;
+}
+
+.day-row span:first-child{color:#aaa}
+
+.day-row span:last-child{
+    color:#9ee0ab;
+    font-weight:bold;
+}
+
+/* CURRENT SERVICES */
+
+.right-side .side-card:last-child{
+    min-height:0;
+    display:flex;
+    flex-direction:column;
+}
+
+.current-list{
+    display:grid;
+    gap:10px;
+    max-height:none;
+    flex:1;
+    overflow:auto;
+}
+
+.current-item{
+    padding:13px;
+    border:1px solid #222;
+    border-radius:14px;
+    background:#0d0d0d;
+}
+
+.current-top{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:8px;
+}
+
+.current-name{
+    font-size:12px;
+    font-weight:bold;
+}
+
+.current-info{
+    margin-top:7px;
+    color:#777;
+    font-size:11px;
+}
+
+.live-btn{
+    border:1px solid #7b2222;
+    background:#1b0909;
+    color:#ff6b6b;
+    border-radius:14px;
+    padding:5px 9px;
+    font-size:9px;
+    letter-spacing:1px;
+    font-weight:bold;
+    animation:livePulse 1.1s infinite;
+}
+
+@keyframes livePulse{
+    0%,100%{box-shadow:0 0 3px rgba(255,0,0,.25)}
+    50%{box-shadow:0 0 13px rgba(255,0,0,.7)}
+}
+
+.status-dot{
+    display:inline-block;
+    width:7px;
+    height:7px;
+    border-radius:50%;
+    margin-right:6px;
+}
+
+.green-dot{
+    background:#72e58a;
+    box-shadow:0 0 8px #72e58a;
+}
+
+.red-dot{
+    background:#ff3131;
+    box-shadow:0 0 9px #ff3131;
+    animation:blink 1s infinite;
+}
+
+@keyframes blink{
+    0%,100%{opacity:1}
+    50%{opacity:.25}
+}
+
+.queue-number{
+    color:#9fc9ef;
+    font-weight:bold;
+}
+
+/* BOTTOM */
+
+.bottom-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:24px;
+    margin-top:24px;
+    align-items:stretch;
+}
+
+.bottom-card{
+    padding:25px;
+    height:460px;
+    box-sizing:border-box;
+    display:flex;
+    flex-direction:column;
+    overflow:hidden;
+}
+
+.help-list,
+.feedback-list{
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+    flex:1;
+    min-height:0;
+}
+
+.feedback-list{
+    overflow-y:auto;
+    padding-right:8px;
+}
+
+.feedback-list::-webkit-scrollbar{
+    width:6px;
+}
+
+.feedback-list::-webkit-scrollbar-track{
+    background:#080808;
+    border-radius:10px;
+}
+
+.feedback-list::-webkit-scrollbar-thumb{
+    background:#444;
+    border-radius:10px;
+}
+
+.help-item,
+.feedback-item{
+    padding:13px;
+    border:1px solid #222;
+    border-radius:14px;
+    background:#0d0d0d;
+}
+
+.help-item strong,
+.feedback-item strong{
+    font-size:12px;
+}
+
+.help-item p,
+.feedback-item p{
+    font-size:11px;
+    color:#777;
+    line-height:1.45;
+    margin-top:5px;
+}
+
+.help-tag,
+.service-tag{
+    display:inline-block;
+    margin-top:8px;
+    font-size:9px;
+    letter-spacing:1px;
+    color:#aaa;
+    border:1px solid #333;
+    border-radius:10px;
+    padding:4px 7px;
+}
+
+.feedback-item .meta{
+    color:#777;
+    font-size:10px;
+    margin-top:4px;
+}
+
+.feedback-item .stars{
+    letter-spacing:2px;
+    margin:7px 0;
+}
+
+.toast{
+    position:fixed;
+    right:25px;
+    bottom:25px;
+    padding:15px 20px;
+    border:1px solid #444;
+    border-radius:15px;
+    background:#111;
+    box-shadow:0 12px 30px #000;
+    transform:translateY(100px);
+    opacity:0;
+    transition:.35s;
+    z-index:100;
+}
+
+.toast.show{
+    transform:translateY(0);
+    opacity:1;
+}
+
+@media(max-width:1050px){
+    .main-layout{grid-template-columns:1fr}
+    .bottom-grid{grid-template-columns:1fr}
+}
+
+@media(max-width:750px){
+    .top-bar{padding:0 15px}
+    .dashboard{padding-top:35px}
+    .main-panel,.side-card,.bottom-card{padding:18px}
+    .services-grid{grid-template-columns:1fr}
+    .panel-head{align-items:flex-start;gap:10px}
+}
+
+@media(max-width:550px){
+    .logo{font-size:18px;letter-spacing:3px}
+    .welcome h1{font-size:35px}
+    .activity-controls{flex-direction:column}
+}
+</style>
+</head>
+
+<body>
+
+<header class="top-bar">
+    <div class="logo">QUEUELESS</div>
+
+    <div class="menu-area">
+        <button class="menu-button" onclick="toggleMenu()">☰</button>
+
+        <div id="dropdown-menu" class="dropdown-menu">
+            <button onclick="logoutAdmin()">Logout</button>
+        </div>
+    </div>
+</header>
+
+<main class="dashboard">
+
+<section class="welcome">
+    <p class="small-title">ADMIN DASHBOARD</p>
+    <h1>WELCOME <span id="admin-name">ADMIN</span></h1>
+    <p>Manage college services, queues and completed student activity.</p>
+</section>
+
+<div class="main-layout">
+
+<!-- COLLEGE SERVICES -->
+
+<section class="panel main-panel">
+
+    <div class="panel-head">
+        <div>
+            <h2>College Services</h2>
+            <p>Manage each service queue.</p>
+        </div>
+    </div>
+
+    <div id="services" class="services-grid"></div>
+
+</section>
+
+
+</div>
+
+<!-- CURRENT SERVICING BELOW COLLEGE SERVICES -->
+
+<section class="panel side-card current-servicing-panel">
+
+    <div class="side-head">
+
+        <h3>Current Servicing</h3>
+
+        <span class="activity-btn">
+            LIVE
+        </span>
+
+    </div>
+
+    <div
+        id="current-services"
+        class="current-list">
+
+        <div class="empty">
+            No service is currently serving a student.
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ADMIN HELP + FEEDBACK -->
+
+<section class="bottom-grid">
+
+    <section class="panel bottom-card">
+
+        <div class="side-head">
+            <h3>Admin Help</h3>
+            <span class="activity-btn">GUIDE</span>
+        </div>
+
+        <div class="help-list">
+
+            <div class="help-item">
+                <strong>STEP 01 — Manage Queues</strong>
+                <p>
+                    Use <b>Next Person</b> to call the next
+                    waiting student.
+                </p>
+                <span class="help-tag">QUEUE CONTROL</span>
+            </div>
+
+            <div class="help-item">
+                <strong>STEP 02 — Complete Service</strong>
+                <p>
+                    Press <b>Complete</b> after helping the
+                    student. This adds the student to Daily Activity.
+                </p>
+                <span class="help-tag">SERVICE FLOW</span>
+            </div>
+
+            <div class="help-item">
+                <strong>STEP 03 — Control Services</strong>
+                <p>
+                    Use Pause, Resume, Close and Open when required.
+                </p>
+                <span class="help-tag">STATUS CONTROL</span>
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <section class="panel bottom-card">
+
+        <div class="side-head">
+            <h3>Student Feedback</h3>
+            <span id="feedback-count" class="activity-btn">0</span>
+        </div>
+
+        <div id="feedback-list" class="feedback-list">
+            <div class="empty">
+                Loading feedback...
+            </div>
+        </div>
+
+    </section>
+
+</section>
+
+</main>
+
+<div id="toast" class="toast"></div>
+
+
+<script>
+
+const API = "http://127.0.0.1:5000";
+
+let dashboardData = [];
+let previousActivityLoaded = false;
+
+
+/* MENU */
+
+function toggleMenu(){
+    document
+        .getElementById("dropdown-menu")
+        .classList.toggle("show");
+}
+
+
+/* LOGOUT */
+
+function logoutAdmin(){
+
+    localStorage.removeItem("queuelessAdmin");
+    localStorage.removeItem("admin_id");
+    localStorage.removeItem("admin_name");
+
+    location.href = "admin-login.html";
+}
+
+
+/* TOAST */
+
+function toast(message){
+
+    const box =
+        document.getElementById("toast");
+
+    box.textContent = message;
+    box.classList.add("show");
+
+    setTimeout(
+        () => box.classList.remove("show"),
+        2200
+    );
+}
+
+
+/* ESCAPE */
+
+function esc(value){
+
+    return String(value ?? "")
+        .replace(/&/g,"&amp;")
+        .replace(/</g,"&lt;")
+        .replace(/>/g,"&gt;")
+        .replace(/"/g,"&quot;")
+        .replace(/'/g,"&#039;");
+}
+
+
+/* SERVICE CLASS */
+
+function serviceClass(status){
+
+    if(status === "OPEN") return "open";
+    if(status === "PAUSED") return "paused";
+
+    return "closed";
+}
+
+
+/* SERVICE DESCRIPTION */
+
+function desc(name){
+
+    return {
+        "College Canteen":
+            "Food and canteen services",
+
+        "Admin Office":
+            "General college administration",
+
+        "Computer Lab":
+            "Computer lab assistance",
+
+        "Library":
+            "Library services and assistance",
+
+        "Accounts Office":
+            "Fees and accounts related services",
+
+        "Examination Cell":
+            "Exam forms and examination services"
+
+    }[name] || "College service";
+}
+
+
+/* NORMALIZE BACKEND DATA */
+
+function normalize(x){
+
+    let serving = null;
+
+    if(x.serving){
+
+        serving = x.serving;
+
+    }else if(
+        x.serving_queue_number !== null &&
+        x.serving_queue_number !== undefined
+    ){
+
+        serving = {
+
+            queue_id:
+                x.serving_queue_id || 0,
+
+            queue_number:
+                x.serving_queue_number,
+
+            student_id:
+                x.serving_student_id || 0,
+
+            full_name:
+                x.serving_student_name ||
+                "Student"
+
+        };
+
+    }
+
+    return {
+
+        id:
+            x.service_id ??
+            x.id,
+
+        name:
+            x.service_name ||
+            x.name ||
+            "College Service",
+
+        status:
+            x.status ||
+            "OPEN",
+
+        waiting:
+            Array.isArray(x.waiting)
+            ? x.waiting
+            : [],
+
+        waiting_count:
+            Number(x.waiting_count || 0),
+
+        serving:
+
+            serving,
+
+        completed:
+
+            Number(
+                x.completed_today ??
+                x.completed_count ??
+                0
+            )
+
+    };
+
+}
+
+
+/* LOAD DASHBOARD */
+
+async function loadDashboard(){
+
+    try{
+
+        const statusResponse = await fetch(
+            API + "/api/admin-queue-status?t=" + Date.now(),
+            { cache: "no-store" }
+        );
+
+        let statusData = null;
+
+        if(statusResponse.ok){
+            statusData = await statusResponse.json();
+        }
+
+        let statusArray = Array.isArray(statusData)
+            ? statusData
+            : (statusData && Array.isArray(statusData.services)
+                ? statusData.services
+                : []);
+
+        /*
+           If admin queue-status is unavailable, load the
+           actual OPEN services directly. This keeps the six
+           service cards visible instead of replacing them with
+           an error message.
+        */
+        if(!statusArray.length){
+
+            const serviceResponse = await fetch(
+                API + "/api/services?t=" + Date.now(),
+                { cache: "no-store" }
+            );
+
+            if(!serviceResponse.ok){
+                throw new Error("Unable to load services");
+            }
+
+            const serviceData = await serviceResponse.json();
+
+            const serviceArray = Array.isArray(serviceData)
+                ? serviceData
+                : (serviceData && Array.isArray(serviceData.services)
+                    ? serviceData.services
+                    : []);
+
+            dashboardData = serviceArray.map(x => normalize({
+                ...x,
+                service_id: x.service_id ?? x.id,
+                service_name: x.service_name ?? x.name,
+                waiting: [],
+                waiting_count: 0,
+                serving: null,
+                completed_today: 0
+            }));
+
+        }else{
+
+            dashboardData = statusArray.map(normalize);
+
+        }
+
+        renderServices();
+        renderCurrentServices();
+
+    }catch(error){
+
+        console.error(
+            "ADMIN DASHBOARD ERROR:",
+            error
+        );
+
+        document.getElementById(
+            "services"
+        ).innerHTML = `
+            <div class="empty">
+                Unable to load college services.
+            </div>
+        `;
+
+    }
+
+}
+
+
+/* COLLEGE SERVICES */
+
+function renderServices(){
+
+    const box =
+        document.getElementById(
+            "services"
+        );
+
+    if(!dashboardData.length){
+
+        box.innerHTML = `
+            <div class="empty">
+                No college services found.
+            </div>
+        `;
+
+        return;
+    }
+
+    box.innerHTML =
+        dashboardData.map(service => {
+
+            const waiting =
+                service.waiting.length ||
+                service.waiting_count;
+
+            const serving =
+                service.serving
+                ? (
+                    "#" +
+                    esc(
+                        service.serving.queue_number
+                    ) +
+                    " - " +
+                    esc(
+                        service.serving.full_name ||
+                        "Student"
+                    )
+                )
+                : "NONE";
+
+            const next =
+                service.waiting.length
+                ? "#" +
+                  esc(
+                    service.waiting[0].queue_number
+                  )
+                : "NONE";
+
+            return `
+
+                <div class="service-card">
+
+                    <h3>
+                        ${esc(service.name)}
+                    </h3>
+
+                    <p class="desc">
+                        ${esc(desc(service.name))}
+                    </p>
+
+                    <span
+                        class="status
+                        ${serviceClass(service.status)}">
+
+                        ${esc(service.status)}
+
+                    </span>
+
+                    <div class="info">
+
+                        <div class="row">
+                            <span>Waiting Students</span>
+                            <strong class="waiting">
+                                ${waiting}
+                            </strong>
+                        </div>
+
+                        <div class="row">
+                            <span>Currently Serving</span>
+                            <strong class="serving">
+                                ${serving}
+                            </strong>
+                        </div>
+
+                        <div class="row">
+                            <span>Next Student</span>
+                            <strong class="next">
+                                ${next}
+                            </strong>
+                        </div>
+
+                        <div class="row">
+                            <span>Completed Today</span>
+                            <strong class="completed">
+                                ${service.completed}
+                            </strong>
+                        </div>
+
+                    </div>
+
+                    <div class="buttons">
+
+                        <button
+                            class="next-btn"
+                            onclick="serveNext(${service.id})">
+
+                            Next Person
+
+                        </button>
+
+                        <button
+                            class="complete-btn"
+                            onclick="completeCurrent(${service.id})"
+                            ${service.serving ? "" : "disabled"}>
+
+                            Complete
+
+                        </button>
+
+                        <button
+                            class="pause-btn"
+                            onclick="serviceAction(
+                                ${service.id},
+                                'pause'
+                            )">
+
+                            Pause
+
+                        </button>
+
+                        <button
+                            class="resume-btn"
+                            onclick="serviceAction(
+                                ${service.id},
+                                'resume'
+                            )">
+
+                            Resume
+
+                        </button>
+
+                        <button
+                            class="close-btn"
+                            onclick="serviceAction(
+                                ${service.id},
+                                'close'
+                            )">
+
+                            Close
+
+                        </button>
+
+                        <button
+                            class="open-btn"
+                            onclick="serviceAction(
+                                ${service.id},
+                                'open'
+                            )">
+
+                            Open
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+            `;
+
+        }).join("");
+
+}
+
+
+/* TODAY */
+
+function renderToday(){
+
+    const box =
+        document.getElementById(
+            "today-activity"
+        );
+
+    if(!dashboardData.length){
+
+        box.innerHTML = `
+            <div class="empty">
+                No services found.
+            </div>
+        `;
+
+        return;
+    }
+
+    box.innerHTML =
+        dashboardData.map(service => {
+
+            const count =
+                Number(service.completed || 0);
+
+            return `
+
+                <div class="activity-item">
+
+                    <div>
+
+                        <strong>
+                            ${esc(service.name)}
+                        </strong>
+
+                        <p>
+                            ${count}
+                            student
+                            ${count === 1 ? "" : "s"}
+                            completed today
+                        </p>
+
+                    </div>
+
+                    <div class="activity-count">
+                        ${count}
+                    </div>
+
+                </div>
+
+            `;
+
+        }).join("");
+
+}
+
+
+/* PREVIOUS */
+
+async function showPrevious(){
+
+    document.getElementById(
+        "today-activity"
+    ).style.display = "none";
+
+    document.getElementById(
+        "previous-activity"
+    ).style.display = "grid";
+
+    document.getElementById(
+        "today-btn"
+    ).classList.remove("active");
+
+    document.getElementById(
+        "previous-btn"
+    ).classList.add("active");
+
+    if(!previousActivityLoaded){
+
+        await loadPreviousActivity();
+
+    }
+
+}
+
+
+function showToday(){
+
+    document.getElementById(
+        "today-activity"
+    ).style.display = "grid";
+
+    document.getElementById(
+        "previous-activity"
+    ).style.display = "none";
+
+    document.getElementById(
+        "today-btn"
+    ).classList.add("active");
+
+    document.getElementById(
+        "previous-btn"
+    ).classList.remove("active");
+
+}
+
+
+/* LOAD PREVIOUS ACTIVITY */
+
+async function loadPreviousActivity(){
+
+    const box =
+        document.getElementById(
+            "previous-activity"
+        );
+
+    try{
+
+        box.innerHTML = `
+            <div class="empty">
+                Loading previous activity...
+            </div>
+        `;
+
+        const response =
+            await fetch(
+                API +
+                "/api/admin-daily-activity?t=" +
+                Date.now()
+            );
+
+        const data =
+            await response.json();
+
+        if(!response.ok || data.success === false){
+            previousActivityLoaded = true;
+            renderPreviousActivity([]);
+            return;
+        }
+
+        previousActivityLoaded = true;
+
+        renderPreviousActivity(
+            data.activity || []
+        );
+
+    }catch(error){
+
+        console.error(error);
+        previousActivityLoaded = true;
+        renderPreviousActivity([]);
+
+    }
+
+}
+
+
+/* RENDER PREVIOUS */
+
+function renderPreviousActivity(items){
+
+    const box =
+        document.getElementById(
+            "previous-activity"
+        );
+
+    if(!items.length){
+
+        box.innerHTML = `
+            <div class="empty">
+                No previous completed students.
+            </div>
+        `;
+
+        return;
+
+    }
+
+    const grouped = {};
+
+    items.forEach(item => {
+
+        if(!grouped[item.date]){
+            grouped[item.date] = [];
+        }
+
+        grouped[item.date].push(item);
+
+    });
+
+
+    box.innerHTML =
+        Object.keys(grouped).map(date => {
+
+            const rows =
+                grouped[date].map(item => {
+
+                    const count =
+                        Number(
+                            item.completed_count || 0
+                        );
+
+                    return `
+
+                        <div class="day-row">
+
+                            <span>
+                                ${esc(
+                                    item.service_name
+                                )}
+                            </span>
+
+                            <span>
+                                ${count}
+                                student
+                                ${count === 1 ? "" : "s"}
+                            </span>
+
+                        </div>
+
+                    `;
+
+                }).join("");
+
+            return `
+
+                <div class="day-block">
+
+                    <div class="day-title">
+                        ${formatDate(date)}
+                    </div>
+
+                    ${rows}
+
+                </div>
+
+            `;
+
+        }).join("");
+
+}
+
+
+/* CURRENT SERVICES */
+
+function renderCurrentServices(){
+
+    const box =
+        document.getElementById(
+            "current-services"
+        );
+
+    const active =
+        dashboardData.filter(
+            service =>
+                service.serving
+        );
+
+    if(!active.length){
+
+        box.innerHTML = `
+            <div class="empty">
+                No student is currently being served.
+            </div>
+        `;
+
+        return;
+
+    }
+
+    box.innerHTML =
+        active.map(service => {
+
+            const serving =
+                service.serving;
+
+            if(!serving){
+
+                return `
+
+                    <div class="current-item">
+
+                        <div class="current-top">
+
+                            <div class="current-name">
+
+                                <span
+                                    class="status-dot green-dot">
+                                </span>
+
+                                ${esc(service.name)}
+
+                            </div>
+
+                            <span
+                                style="
+                                    color:#666;
+                                    font-size:9px;
+                                ">
+
+                                OPEN
+
+                            </span>
+
+                        </div>
+
+                        <div class="current-info">
+
+                            Waiting:
+                            ${service.waiting.length ||
+                              service.waiting_count ||
+                              0}
+
+                            · No student being served
+
+                        </div>
+
+                    </div>
+
+                `;
+
+            }
+
+            return `
+
+                <div class="current-item">
+
+                    <div class="current-top">
+
+                        <div class="current-name">
+
+                            <span
+                                class="status-dot red-dot">
+                            </span>
+
+                            ${esc(service.name)}
+
+                        </div>
+
+                        <button
+                            class="live-btn"
+                            onclick="focusService(
+                                ${service.id}
+                            )">
+
+                            ● LIVE
+
+                        </button>
+
+                    </div>
+
+                    <div class="current-info">
+
+                        Student Number:
+                        <span class="queue-number">
+                            #${esc(
+                                serving.queue_number
+                            )}
+                        </span>
+
+                        ·
+                        ${esc(
+                            serving.full_name ||
+                            "Student"
+                        )}
+
+                    </div>
+
+                </div>
+
+            `;
+
+        }).join("");
+
+}
+
+
+/* FOCUS CURRENT SERVICE */
+
+function focusService(serviceId){
+
+    const card =
+        [...document.querySelectorAll(
+            ".service-card"
+        )].find(card =>
+            card.querySelector(
+                "button"
+            )?.getAttribute("onclick")?.includes(
+                String(serviceId)
+            )
+        );
+
+    if(card){
+
+        card.scrollIntoView({
+            behavior:"smooth",
+            block:"center"
+        });
+
+    }
+
+}
+
+
+/* POST */
+
+async function post(url){
+
+    const response =
+        await fetch(
+            API + url,
+            {
+                method:"POST",
+                headers:{
+                    "Content-Type":
+                        "application/json"
+                },
+                body:"{}"
+            }
+        );
+
+    const data =
+        await response.json();
+
+    if(
+        !response.ok ||
+        data.success === false
+    ){
+
+        throw new Error(
+            data.message ||
+            "Action failed"
+        );
+
+    }
+
+    return data;
+
+}
+
+
+/* SERVE NEXT */
+
+async function serveNext(id){
+
+    try{
+
+        const response = await fetch(
+            API + "/api/serve-next/" + id,
+            {
+                method:"POST",
+                headers:{
+                    "Content-Type":"application/json"
+                },
+                body:"{}"
+            }
+        );
+
+        const data = await response.json();
+
+        if(!response.ok || data.success === false){
+            throw new Error(
+                data.message ||
+                "Unable to call next student"
+            );
+        }
+
+        toast(
+            data.message ||
+            "Next student called"
+        );
+
+        await loadDashboard();
+
+    }catch(error){
+
+        console.error("NEXT PERSON ERROR:",error);
+        toast(error.message);
+
+    }
+
+}
+
+
+/* COMPLETE */
+
+async function completeCurrent(serviceId){
+    try{
+
+        /* Find the actual SERVING queue ID from the backend. */
+        const debugResponse = await fetch(
+            API + "/api/debug-db?t=" + Date.now(),
+            {cache:"no-store"}
+        );
+
+        const debugData = await debugResponse.json();
+
+        const queues =
+            Array.isArray(debugData.queues)
+            ? debugData.queues
+            : [];
+
+        const servingQueue = queues.find(
+            q =>
+                Number(q.service_id) === Number(serviceId) &&
+                q.status === "SERVING"
+        );
+
+        if(!servingQueue){
+            throw new Error(
+                "No student is currently being served"
+            );
+        }
+
+        await post(
+            "/api/complete/" + servingQueue.id
+        );
+
+        previousActivityLoaded = false;
+
+        toast(
+            "Service completed"
+        );
+
+        await loadDashboard();
+
+    }catch(error){
+
+        console.error("COMPLETE ERROR:",error);
+        toast(error.message);
+
+    }
+
+}
+
+
+/* SERVICE ACTION */
+
+async function serviceAction(id, action){
+
+    try{
+
+        await post(
+            "/api/" +
+            action +
+            "-service/" +
+            id
+        );
+
+        toast(
+            "Service " +
+            action +
+            "d"
+        );
+
+        loadDashboard();
+
+    }catch(error){
+
+        toast(error.message);
+
+    }
+
+}
+
+
+/* FEEDBACK */
+
+async function loadFeedback(){
+
+    try{
+
+        const response =
+            await fetch(
+                API +
+                "/api/admin-feedback?t=" +
+                Date.now()
+            );
+
+        const data =
+            await response.json();
+
+        if(!response.ok){
+
+            throw new Error(
+                "Unable to load feedback"
+            );
+
+        }
+
+        const items =
+            Array.isArray(data)
+            ? data
+            : (
+                data.feedback ||
+                data.feedbacks ||
+                []
+            );
+
+        document.getElementById(
+            "feedback-count"
+        ).textContent =
+            items.length;
+
+        const box =
+            document.getElementById(
+                "feedback-list"
+            );
+
+        if(!items.length){
+
+            box.innerHTML = `
+                <div class="empty">
+                    No student feedback yet.
+                </div>
+            `;
+
+            return;
+
+        }
+
+        box.innerHTML =
+            items.slice(0,8).map(item => {
+
+                const text =
+                    item.message ||
+                    item.feedback ||
+                    "";
+
+                const match =
+                    text.match(
+                        /^\[Service:\s*(.*?)\]\s*(.*)$/
+                    );
+
+                const service =
+                    match
+                    ? match[1]
+                    : "";
+
+                const message =
+                    match
+                    ? match[2]
+                    : text;
+
+                const rating =
+                    Math.max(
+                        1,
+                        Math.min(
+                            5,
+                            Number(
+                                item.rating || 5
+                            )
+                        )
+                    );
+
+                return `
+
+                    <div class="feedback-item">
+
+                        <strong>
+                            ${esc(
+                                item.student_name ||
+                                "Student"
+                            )}
+                        </strong>
+
+                        <div class="meta">
+                            ${esc(
+                                item.created_at ||
+                                "Recently"
+                            )}
+                        </div>
+
+                        <div class="stars">
+                            ${"★".repeat(rating)}
+                            ${"☆".repeat(5-rating)}
+                        </div>
+
+                        ${
+                            service
+                            ? `
+                                <span
+                                    class="service-tag">
+                                    ${esc(service)}
+                                </span>
+                              `
+                            : ""
+                        }
+
+                        <p>
+                            ${esc(message)}
+                        </p>
+
+                    </div>
+
+                `;
+
+            }).join("");
+
+    }catch(error){
+
+        console.error(
+            "FEEDBACK ERROR:",
+            error
+        );
+
+        document.getElementById(
+            "feedback-list"
+        ).innerHTML = `
+            <div class="empty">
+                Unable to load feedback.
+            </div>
+        `;
+
+    }
+
+}
+
+
+/* DATE */
+
+function formatDate(value){
+
+    if(!value){
+        return "";
+    }
+
+    const date =
+        new Date(
+            value + "T00:00:00"
+        );
+
+    return date.toLocaleDateString(
+        "en-GB",
+        {
+            day:"2-digit",
+            month:"short",
+            year:"numeric"
+        }
+    );
+
+}
+
+
+/* ADMIN NAME */
+
+(function(){
+
+    try{
+
+        const admin =
+            JSON.parse(
+                localStorage.getItem(
+                    "queuelessAdmin"
+                ) || "null"
+            );
+
+        if(admin){
+
+            document.getElementById(
+                "admin-name"
+            ).textContent =
+                (
+                    admin.full_name ||
+                    admin.name ||
+                    "ADMIN"
+                ).toUpperCase();
+
+        }
+
+    }catch(error){
+
+        console.error(error);
+
+    }
+
+})();
+
+
+/* CLOSE MENU */
+
+document.addEventListener(
+    "click",
+    function(event){
+
+        if(
+            !event.target.closest(
+                ".menu-area"
+            )
+        ){
+
+            document
+                .getElementById(
+                    "dropdown-menu"
+                )
+                .classList.remove(
+                    "show"
+                );
+
+        }
+
+    }
+);
+
+
+/* START */
+
+loadDashboard();
+loadFeedback();
+
+setInterval(
+    loadDashboard,
+    3000
+);
+
+setInterval(
+    loadFeedback,
+    5000
+);
+
+</script>
+
+</body>
+</html>

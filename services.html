@@ -1,0 +1,1496 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>QueueLess - College Services</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            background: #000;
+            color: #fff;
+            font-family: Arial, sans-serif;
+        }
+
+        /* =========================
+           TOP BAR
+        ========================= */
+
+        .top-bar {
+            height: 72px;
+            padding: 0 30px;
+            border-bottom: 1px solid #222;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: #000;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 800;
+            letter-spacing: 4px;
+        }
+
+        .student-name {
+            font-size: 14px;
+            color: #aaa;
+            margin-left: auto;
+            margin-right: 18px;
+        }
+
+        .student-name span {
+            color: #fff;
+            font-weight: bold;
+        }
+
+        .menu-area {
+            position: relative;
+        }
+
+        .menu-button {
+            width: 45px;
+            height: 42px;
+            background: #050505;
+            color: #fff;
+            border: 1px solid #555;
+            border-radius: 12px;
+            font-size: 23px;
+            cursor: pointer;
+            box-shadow:
+                0 5px 15px rgba(255,255,255,0.05),
+                inset 0 0 12px rgba(255,255,255,0.03);
+        }
+
+        .menu-button:hover {
+            border-color: #aaa;
+            box-shadow: 0 0 18px rgba(255,255,255,0.2);
+        }
+
+        .menu-box {
+            display: none;
+            position: absolute;
+            right: 0;
+            top: 52px;
+            width: 150px;
+            background: #0b0b0b;
+            border: 1px solid #444;
+            border-radius: 14px;
+            padding: 10px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.8);
+        }
+
+        .menu-box.show {
+            display: block;
+        }
+
+        .menu-box button {
+            width: 100%;
+            padding: 11px;
+            background: #000;
+            color: #fff;
+            border: 1px solid #444;
+            border-radius: 9px;
+            cursor: pointer;
+        }
+
+        .menu-box button:hover {
+            border-color: #aaa;
+        }
+
+        /* =========================
+           HEADER
+        ========================= */
+
+        .page-header {
+            text-align: center;
+            padding: 42px 20px 25px;
+        }
+
+        .page-header h1 {
+            margin: 0 0 10px;
+            font-size: 38px;
+            letter-spacing: 1px;
+        }
+
+        .page-header p {
+            margin: 0;
+            color: #999;
+            font-size: 15px;
+        }
+
+        /* =========================
+           SERVICES GRID
+        ========================= */
+
+        .services-container {
+            width: 92%;
+            max-width: 1250px;
+            margin: auto;
+            padding: 15px 0 130px;
+
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+        }
+
+        .service-card {
+            background:
+                linear-gradient(145deg, #111, #050505);
+            border: 1px solid #303030;
+            border-radius: 20px;
+            padding: 25px;
+
+            min-height: 360px;
+
+            box-shadow:
+                0 15px 35px rgba(255,255,255,0.04),
+                inset 0 0 25px rgba(255,255,255,0.02);
+
+            transition: 0.25s ease;
+        }
+
+        .service-card:hover {
+            transform: translateY(-5px);
+            border-color: #666;
+
+            box-shadow:
+                0 18px 45px rgba(255,255,255,0.08),
+                0 0 20px rgba(255,255,255,0.05),
+                inset 0 0 25px rgba(255,255,255,0.03);
+        }
+
+        .service-icon {
+            width: 65px;
+            height: 65px;
+            border-radius: 18px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-size: 34px;
+
+            background: #090909;
+            border: 1px solid #444;
+
+            margin-bottom: 17px;
+
+            box-shadow:
+                0 8px 20px rgba(255,255,255,0.05),
+                inset 0 0 15px rgba(255,255,255,0.04);
+        }
+
+        .service-card h2 {
+            margin: 0 0 8px;
+            font-size: 22px;
+        }
+
+        .service-description {
+            color: #888;
+            font-size: 13px;
+            min-height: 34px;
+            line-height: 1.5;
+        }
+
+        /* =========================
+           INFO
+        ========================= */
+
+        .service-info {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin: 18px 0;
+        }
+
+        .info-box {
+            background: #080808;
+            border: 1px solid #292929;
+            border-radius: 11px;
+            padding: 11px;
+        }
+
+        .info-label {
+            display: block;
+            color: #777;
+            font-size: 11px;
+            margin-bottom: 5px;
+        }
+
+        .info-value {
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .status-open {
+            color: #fff;
+        }
+
+        .status-closed {
+            color: #777;
+        }
+
+        /* =========================
+           WORK SELECT
+        ========================= */
+
+        .work-label {
+            display: block;
+            color: #aaa;
+            font-size: 12px;
+            margin-bottom: 7px;
+        }
+
+        .work-select {
+            width: 100%;
+            padding: 12px;
+
+            background: #050505;
+            color: #fff;
+
+            border: 1px solid #444;
+            border-radius: 11px;
+
+            outline: none;
+            font-size: 13px;
+            cursor: pointer;
+        }
+
+        .work-select:focus {
+            border-color: #aaa;
+            box-shadow: 0 0 12px rgba(255,255,255,0.08);
+        }
+
+        .work-select option {
+            background: #111;
+            color: #fff;
+        }
+
+        .selected-time {
+            min-height: 18px;
+            margin-top: 7px;
+            color: #aaa;
+            font-size: 12px;
+        }
+
+        /* =========================
+           JOIN BUTTON
+        ========================= */
+
+        .join-button {
+            width: 100%;
+            margin-top: 12px;
+            padding: 13px;
+
+            background: #000;
+            color: #fff;
+
+            border: 1px solid #666;
+            border-radius: 12px;
+
+            font-size: 14px;
+            font-weight: bold;
+
+            cursor: pointer;
+
+            box-shadow:
+                0 7px 15px rgba(255,255,255,0.03),
+                inset 0 0 12px rgba(255,255,255,0.02);
+
+            transition: 0.2s;
+        }
+
+        .join-button:hover {
+            border-color: #aaa;
+            box-shadow:
+                0 0 20px rgba(255,255,255,0.13);
+        }
+
+        .join-button:active {
+            transform: scale(0.97);
+        }
+
+        .join-button:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+        /* =========================
+           MY QUEUE BUTTON
+        ========================= */
+
+        .joined-floating {
+            position: fixed;
+            left: 50%;
+            bottom: 25px;
+            transform: translateX(-50%);
+
+            padding: 14px 28px;
+
+            background: #050505;
+            color: #fff;
+
+            border: 1px solid #666;
+            border-radius: 30px;
+
+            font-size: 14px;
+            font-weight: bold;
+
+            cursor: pointer;
+
+            box-shadow:
+                0 10px 30px rgba(0,0,0,0.8),
+                0 0 18px rgba(255,255,255,0.07);
+
+            z-index: 90;
+        }
+
+        .joined-floating:hover {
+            border-color: #aaa;
+            box-shadow: 0 0 25px rgba(255,255,255,0.18);
+        }
+
+        /* =========================
+           LOADING / ERROR
+        ========================= */
+
+        .loading,
+        .error-box {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 70px 20px;
+            color: #aaa;
+        }
+
+        .error-box h2 {
+            color: #fff;
+        }
+
+        /* =========================
+           TOAST
+        ========================= */
+
+        .toast {
+            position: fixed;
+            left: 50%;
+            bottom: 90px;
+            transform: translateX(-50%) translateY(20px);
+
+            background: #111;
+            color: #fff;
+
+            border: 1px solid #555;
+            border-radius: 12px;
+
+            padding: 13px 20px;
+
+            opacity: 0;
+            pointer-events: none;
+
+            transition: 0.25s;
+            z-index: 200;
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        /* =========================
+           RESPONSIVE
+        ========================= */
+
+        @media (max-width: 1000px) {
+
+            .services-container {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 650px) {
+
+            .top-bar {
+                padding: 0 15px;
+            }
+
+            .logo {
+                font-size: 20px;
+                letter-spacing: 3px;
+            }
+
+            .student-name {
+                display: none;
+            }
+
+            .page-header {
+                padding-top: 30px;
+            }
+
+            .page-header h1 {
+                font-size: 30px;
+            }
+
+            .services-container {
+                width: 94%;
+                grid-template-columns: 1fr;
+                gap: 18px;
+            }
+
+            .service-card {
+                min-height: auto;
+            }
+
+            .joined-floating {
+                bottom: 18px;
+                width: 85%;
+                max-width: 330px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- =========================
+         TOP BAR
+    ========================= -->
+
+    <header class="top-bar">
+
+        <div class="logo">
+            QUEUELESS
+        </div>
+
+        <div class="student-name">
+            Welcome, <span id="studentName">Student</span>
+        </div>
+
+        <div class="menu-area">
+
+            <button
+                class="menu-button"
+                onclick="toggleMenu()">
+                ☰
+            </button>
+
+            <div
+                id="menuBox"
+                class="menu-box">
+
+                <button onclick="logout()">
+                    Logout
+                </button>
+
+            </div>
+
+        </div>
+
+    </header>
+
+
+    <!-- =========================
+         PAGE HEADER
+    ========================= -->
+
+    <section class="page-header">
+
+        <h1>
+            College Services
+        </h1>
+
+        <p>
+            Select your work and join the queue
+        </p>
+
+    </section>
+
+
+    <!-- =========================
+         SERVICES
+    ========================= -->
+
+    <main>
+
+        <div
+            id="servicesContainer"
+            class="services-container">
+
+            <div class="loading">
+                Loading college services...
+            </div>
+
+        </div>
+
+    </main>
+
+
+    <!-- =========================
+         MY QUEUE
+    ========================= -->
+
+    <button
+        class="joined-floating"
+        onclick="openMyQueue()">
+
+        My Joined Queues
+
+    </button>
+
+
+    <!-- =========================
+         TOAST
+    ========================= -->
+
+    <div
+        id="toast"
+        class="toast">
+    </div>
+
+
+<script>
+
+    /* =====================================================
+       API
+    ===================================================== */
+
+    const API_URL = "http://127.0.0.1:5000";
+
+
+    /* =====================================================
+       STUDENT DATA
+    ===================================================== */
+
+    const studentData =
+        JSON.parse(
+            localStorage.getItem("student") || "{}"
+        );
+
+
+    const studentId =
+        localStorage.getItem("studentId") ||
+        localStorage.getItem("student_id") ||
+        studentData.student_id ||
+        studentData.id ||
+        "";
+
+
+    const studentName =
+        localStorage.getItem("studentName") ||
+        studentData.full_name ||
+        studentData.name ||
+        "Student";
+
+
+    document.getElementById("studentName").textContent =
+        studentName;
+
+
+    /* =====================================================
+       SERVICE INFORMATION
+    ===================================================== */
+
+    const serviceDetails = {
+
+        1: {
+            icon: "🍽️",
+            description: "Food and canteen services"
+        },
+
+        2: {
+            icon: "🏢",
+            description: "General college administration"
+        },
+
+        3: {
+            icon: "💻",
+            description: "Computer lab assistance"
+        },
+
+        4: {
+            icon: "📚",
+            description: "Library services and assistance"
+        },
+
+        5: {
+            icon: "💳",
+            description: "Fees and accounts related services"
+        },
+
+        6: {
+            icon: "📝",
+            description: "Exam forms and examination services"
+        }
+
+    };
+
+
+    /* =====================================================
+       WORK OPTIONS
+       Backup list is kept here so the page still knows
+       the correct work/time for every service.
+    ===================================================== */
+
+    const workOptions = {
+
+        1: [
+            ["Tea", 1],
+            ["Coffee", 2],
+            ["Sandwich", 5],
+            ["Burger", 10],
+            ["Noodles", 15],
+            ["Special Meal", 20],
+            ["Pizza", 30]
+        ],
+
+        2: [
+            ["Admission", 20],
+            ["Issue Fee Receipt", 5],
+            ["Bonafide Certificate", 10],
+            ["Document Verification", 10],
+            ["Scholarship/Form Submission", 15],
+            ["ID Card Related Work", 10]
+        ],
+
+        3: [
+            ["Generate Email & Password", 5],
+            ["Password Reset", 3],
+            ["Software Installation", 15],
+            ["Printing", 2],
+            ["Assignment Submission", 5],
+            ["Computer/Lab Assistance", 10]
+        ],
+
+        4: [
+            ["Issue Library Card", 5],
+            ["New Book Issue", 3],
+            ["Book Return", 2],
+            ["Book Renewal", 2],
+            ["Fine Payment", 3],
+            ["Library Account Update", 5]
+        ],
+
+        5: [
+            ["Fee Payment", 5],
+            ["Fee Receipt", 5],
+            ["Scholarship Payment", 10],
+            ["Refund Request", 15],
+            ["Account Verification", 10],
+            ["Payment Issue", 10]
+        ],
+
+        6: [
+            ["Exam Registration", 10],
+            ["Hall Ticket Issue", 5],
+            ["Marks Card", 10],
+            ["Exam Form Correction", 15],
+            ["Certificate Request", 10],
+            ["Exam Related Help", 5]
+        ]
+
+    };
+
+
+    /* =====================================================
+       ESCAPE HTML
+    ===================================================== */
+
+    function escapeHTML(value) {
+
+        return String(value ?? "")
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;");
+
+    }
+
+
+    /* =====================================================
+       SHOW TOAST
+    ===================================================== */
+
+    function showToast(message) {
+
+        const toast =
+            document.getElementById("toast");
+
+        toast.textContent = message;
+
+        toast.classList.add("show");
+
+        setTimeout(function() {
+
+            toast.classList.remove("show");
+
+        }, 2500);
+
+    }
+
+
+    /* =====================================================
+       LOAD SERVICES
+    ===================================================== */
+
+    async function loadServices() {
+
+        const container =
+            document.getElementById(
+                "servicesContainer"
+            );
+
+
+        try {
+
+            const response =
+                await fetch(
+                    API_URL +
+                    "/api/services?t=" +
+                    Date.now()
+                );
+
+
+            if (!response.ok) {
+
+                throw new Error(
+                    "Unable to load services"
+                );
+
+            }
+
+
+            const result =
+                await response.json();
+
+
+            const services =
+                Array.isArray(result)
+                    ? result
+                    : (result.services || []);
+
+
+            /*
+                Always show the six QueueLess services.
+            */
+
+            const serviceMap = {};
+
+            services.forEach(function(service) {
+
+                const id =
+                    Number(
+                        service.id ??
+                        service.service_id
+                    );
+
+                if (id) {
+                    serviceMap[id] = service;
+                }
+
+            });
+
+
+            const sixServices = [];
+
+            for (let id = 1; id <= 6; id++) {
+
+                if (serviceMap[id]) {
+
+                    sixServices.push(
+                        serviceMap[id]
+                    );
+
+                } else {
+
+                    /*
+                        Fallback service names.
+                    */
+
+                    const names = {
+
+                        1: "College Canteen",
+                        2: "Admin Office",
+                        3: "Computer Lab",
+                        4: "Library",
+                        5: "Accounts Office",
+                        6: "Examination Cell"
+
+                    };
+
+                    sixServices.push({
+
+                        id: id,
+                        service_id: id,
+                        service_name: names[id],
+                        average_service_time:
+                            getAverageTime(id),
+                        status: "OPEN"
+
+                    });
+
+                }
+
+            }
+
+
+            container.innerHTML = "";
+
+
+            sixServices.forEach(
+                function(service) {
+
+                    createServiceCard(
+                        service
+                    );
+
+                }
+            );
+
+
+        } catch (error) {
+
+            console.error(
+                "SERVICES ERROR:",
+                error
+            );
+
+
+            /*
+                Even if API loading fails,
+                show all six services.
+            */
+
+            container.innerHTML = "";
+
+
+            const names = {
+
+                1: "College Canteen",
+                2: "Admin Office",
+                3: "Computer Lab",
+                4: "Library",
+                5: "Accounts Office",
+                6: "Examination Cell"
+
+            };
+
+
+            for (let id = 1; id <= 6; id++) {
+
+                createServiceCard({
+
+                    id: id,
+
+                    service_id: id,
+
+                    service_name: names[id],
+
+                    average_service_time:
+                        getAverageTime(id),
+
+                    status: "OPEN"
+
+                });
+
+            }
+
+        }
+
+    }
+
+
+    /* =====================================================
+       AVERAGE TIME
+    ===================================================== */
+
+    function getAverageTime(serviceId) {
+
+        const options =
+            workOptions[serviceId] || [];
+
+        if (!options.length) {
+            return 5;
+        }
+
+        const total =
+            options.reduce(
+                function(sum, item) {
+                    return sum + Number(item[1]);
+                },
+                0
+            );
+
+        return Math.round(
+            total / options.length
+        );
+
+    }
+
+
+    /* =====================================================
+       CREATE SERVICE CARD
+    ===================================================== */
+
+    function createServiceCard(service) {
+
+        const container =
+            document.getElementById(
+                "servicesContainer"
+            );
+
+
+        const serviceId =
+            Number(
+                service.id ??
+                service.service_id
+            );
+
+
+        const serviceName =
+            service.service_name ||
+            service.name ||
+            "College Service";
+
+
+        const details =
+            serviceDetails[serviceId] || {
+
+                icon: "🏫",
+
+                description:
+                    "College service"
+
+            };
+
+
+        const status =
+            String(
+                service.status || "OPEN"
+            ).toUpperCase();
+
+
+        const card =
+            document.createElement("div");
+
+
+        card.className =
+            "service-card";
+
+
+        const options =
+            workOptions[serviceId] || [];
+
+
+        const averageTime =
+            service.average_service_time ||
+            getAverageTime(serviceId);
+
+
+        let optionsHTML = `
+            <option value="">
+                Select your work
+            </option>
+        `;
+
+
+        options.forEach(
+            function(option) {
+
+                const workName =
+                    option[0];
+
+                const minutes =
+                    option[1];
+
+                optionsHTML += `
+                    <option
+                        value="${escapeHTML(workName)}"
+                        data-time="${minutes}">
+                        ${escapeHTML(workName)}
+                        — ${minutes} min
+                    </option>
+                `;
+
+            }
+        );
+
+
+        const disabled =
+            status !== "OPEN";
+
+
+        card.innerHTML = `
+
+            <div class="service-icon">
+                ${details.icon}
+            </div>
+
+            <h2>
+                ${escapeHTML(serviceName)}
+            </h2>
+
+            <div class="service-description">
+                ${escapeHTML(details.description)}
+            </div>
+
+            <div class="service-info">
+
+                <div class="info-box">
+
+                    <span class="info-label">
+                        Average Time
+                    </span>
+
+                    <span class="info-value">
+                        ${escapeHTML(averageTime)}
+                        min
+                    </span>
+
+                </div>
+
+                <div class="info-box">
+
+                    <span class="info-label">
+                        Status
+                    </span>
+
+                    <span class="info-value
+                        ${status === "OPEN"
+                            ? "status-open"
+                            : "status-closed"}">
+
+                        ${escapeHTML(status)}
+
+                    </span>
+
+                </div>
+
+            </div>
+
+            <label class="work-label">
+                Select Your Work
+            </label>
+
+            <select
+                class="work-select"
+                id="work-${serviceId}"
+                ${disabled ? "disabled" : ""}
+                onchange="updateWorkTime(${serviceId})">
+
+                ${optionsHTML}
+
+            </select>
+
+            <div
+                class="selected-time"
+                id="time-${serviceId}">
+
+                Select a work to see service time
+
+            </div>
+
+            <button
+                class="join-button"
+                id="join-${serviceId}"
+                onclick="joinQueue(${serviceId})"
+                ${disabled ? "disabled" : ""}>
+
+                ${disabled
+                    ? "SERVICE " + status
+                    : "JOIN QUEUE"}
+
+            </button>
+
+        `;
+
+
+        container.appendChild(card);
+
+    }
+
+
+    /* =====================================================
+       UPDATE WORK TIME
+    ===================================================== */
+
+    function updateWorkTime(serviceId) {
+
+        const select =
+            document.getElementById(
+                "work-" + serviceId
+            );
+
+
+        const timeBox =
+            document.getElementById(
+                "time-" + serviceId
+            );
+
+
+        if (!select || !timeBox) {
+            return;
+        }
+
+
+        const selected =
+            select.options[
+                select.selectedIndex
+            ];
+
+
+        if (!selected || !selected.value) {
+
+            timeBox.textContent =
+                "Select a work to see service time";
+
+            return;
+
+        }
+
+
+        const minutes =
+            selected.dataset.time || "0";
+
+
+        timeBox.innerHTML =
+            "⏱ Service time: <strong>" +
+            escapeHTML(minutes) +
+            " minutes</strong>";
+
+    }
+
+
+    /* =====================================================
+       JOIN QUEUE
+    ===================================================== */
+
+    async function joinQueue(serviceId) {
+
+        if (!studentId) {
+
+            alert(
+                "Please login first."
+            );
+
+            window.location.href =
+                "index.html";
+
+            return;
+
+        }
+
+
+        const select =
+            document.getElementById(
+                "work-" + serviceId
+            );
+
+
+        if (!select) {
+
+            alert(
+                "Please select your work."
+            );
+
+            return;
+
+        }
+
+
+        const selectedOption =
+            select.options[
+                select.selectedIndex
+            ];
+
+
+        if (
+            !selectedOption ||
+            !selectedOption.value
+        ) {
+
+            alert(
+                "Please select your work before joining the queue."
+            );
+
+            select.focus();
+
+            return;
+
+        }
+
+
+        const itemName =
+            selectedOption.value;
+
+
+        const serviceTime =
+            Number(
+                selectedOption.dataset.time || 0
+            );
+
+
+        const button =
+            document.getElementById(
+                "join-" + serviceId
+            );
+
+
+        if (button) {
+
+            button.disabled = true;
+
+            button.textContent =
+                "JOINING...";
+
+        }
+
+
+        try {
+
+            const response =
+                await fetch(
+                    API_URL +
+                    "/api/join",
+                    {
+
+                        method: "POST",
+
+                        headers: {
+                            "Content-Type":
+                                "application/json"
+                        },
+
+                        body:
+                            JSON.stringify({
+
+                                student_id:
+                                    Number(
+                                        studentId
+                                    ),
+
+                                service_id:
+                                    Number(
+                                        serviceId
+                                    ),
+
+                                item_name:
+                                    itemName,
+
+                                service_time_minutes:
+                                    serviceTime
+
+                            })
+
+                    }
+                );
+
+
+            const data =
+                await response.json();
+
+
+            if (
+                response.ok &&
+                data.success
+            ) {
+
+                alert(
+
+                    "Queue joined successfully!\n\n" +
+
+                    "Service: " +
+                    (
+                        data.service_name ||
+                        "College Service"
+                    ) +
+
+                    "\nWork: " +
+                    (
+                        data.item_name ||
+                        itemName
+                    ) +
+
+                    "\nQueue Number: #" +
+                    (
+                        data.queue_number ||
+                        "?"
+                    ) +
+
+                    "\nService Time: " +
+                    (
+                        data.service_time_minutes ||
+                        serviceTime
+                    ) +
+                    " minutes"
+
+                );
+
+
+                /*
+                    Send user directly to My Queue
+                    after successful joining.
+                */
+
+                window.location.href =
+                    "myqueue.html";
+
+
+            } else {
+
+                alert(
+                    data.message ||
+                    "Unable to join queue."
+                );
+
+
+                if (button) {
+
+                    button.disabled = false;
+
+                    button.textContent =
+                        "JOIN QUEUE";
+
+                }
+
+            }
+
+
+        } catch (error) {
+
+            console.error(
+                "JOIN ERROR:",
+                error
+            );
+
+
+            alert(
+                "Cannot connect to QueueLess server."
+            );
+
+
+            if (button) {
+
+                button.disabled = false;
+
+                button.textContent =
+                    "JOIN QUEUE";
+
+            }
+
+        }
+
+    }
+
+
+    /* =====================================================
+       MENU
+    ===================================================== */
+
+    function toggleMenu() {
+
+        const menu =
+            document.getElementById(
+                "menuBox"
+            );
+
+        menu.classList.toggle("show");
+
+    }
+
+
+    /* =====================================================
+       CLOSE MENU WHEN CLICKING OUTSIDE
+    ===================================================== */
+
+    document.addEventListener(
+        "click",
+        function(event) {
+
+            const menuArea =
+                document.querySelector(
+                    ".menu-area"
+                );
+
+            if (
+                menuArea &&
+                !menuArea.contains(
+                    event.target
+                )
+            ) {
+
+                document
+                    .getElementById("menuBox")
+                    .classList.remove("show");
+
+            }
+
+        }
+    );
+
+
+    /* =====================================================
+       LOGOUT
+    ===================================================== */
+
+    function logout() {
+
+        localStorage.removeItem(
+            "student"
+        );
+
+        localStorage.removeItem(
+            "studentName"
+        );
+
+        localStorage.removeItem(
+            "studentId"
+        );
+
+        localStorage.removeItem(
+            "student_id"
+        );
+
+        localStorage.removeItem(
+            "collegeId"
+        );
+
+        window.location.href =
+            "index.html";
+
+    }
+
+
+    /* =====================================================
+       MY QUEUE
+    ===================================================== */
+
+    function openMyQueue() {
+
+        window.location.href =
+            "myqueue.html";
+
+    }
+
+
+    /* =====================================================
+       START
+    ===================================================== */
+
+    loadServices();
+
+</script>
+
+</body>
+</html>

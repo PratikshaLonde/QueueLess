@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>QueueLess - Admin Login</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background:
+                radial-gradient(circle at top, #202020 0%, #090909 45%, #000 100%);
+            color: white;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 430px;
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .logo h1 {
+            font-size: 34px;
+            font-weight: 900;
+            letter-spacing: 4px;
+        }
+
+        .logo p {
+            margin-top: 7px;
+            color: #aaa;
+            font-size: 13px;
+            letter-spacing: 2px;
+        }
+
+        .card {
+            background: rgba(20, 20, 20, 0.97);
+            border: 1px solid #333;
+            border-radius: 20px;
+
+            padding: 32px;
+
+            box-shadow:
+                0 15px 40px rgba(0, 0, 0, 0.8),
+                inset 0 1px 0 rgba(255, 255, 255, 0.04);
+        }
+
+        .title {
+            text-align: center;
+            font-size: 23px;
+            font-weight: 800;
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #888;
+            font-size: 13px;
+            margin-bottom: 28px;
+        }
+
+        .field {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+
+            color: #ccc;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .input-box {
+            position: relative;
+        }
+
+        .input-icon {
+            position: absolute;
+
+            left: 14px;
+            top: 50%;
+
+            transform: translateY(-50%);
+
+            font-size: 17px;
+            color: #aaa;
+
+            z-index: 2;
+        }
+
+        input {
+            width: 100%;
+            height: 50px;
+
+            padding: 0 15px 0 44px;
+
+            border-radius: 12px;
+            border: 1px solid #333;
+
+            outline: none;
+
+            background: #0d0d0d;
+            color: white;
+
+            font-size: 14px;
+
+            transition: 0.2s;
+        }
+
+        input:focus {
+            border-color: #777;
+
+            box-shadow:
+                0 0 0 2px rgba(255, 255, 255, 0.04);
+        }
+
+        input::placeholder {
+            color: #666;
+        }
+
+        .security-box {
+            margin: 5px 0 23px;
+
+            padding: 14px;
+
+            border-radius: 12px;
+
+            background: #111;
+            border: 1px solid #292929;
+
+            text-align: center;
+        }
+
+        .security-title {
+            font-size: 13px;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .security-text {
+            color: #777;
+            font-size: 12px;
+            line-height: 1.5;
+        }
+
+        .login-btn {
+            width: 100%;
+            height: 52px;
+
+            border: none;
+            border-radius: 13px;
+
+            background:
+                linear-gradient(145deg, #303030, #111);
+
+            color: white;
+
+            font-size: 15px;
+            font-weight: 800;
+
+            letter-spacing: 1px;
+
+            cursor: pointer;
+
+            box-shadow:
+                0 7px 0 #050505,
+                0 12px 25px rgba(0, 0, 0, 0.7);
+
+            transition: 0.15s;
+        }
+
+        .login-btn:hover {
+            transform: translateY(-1px);
+        }
+
+        .login-btn:active {
+            transform: translateY(5px);
+
+            box-shadow:
+                0 2px 0 #050505,
+                0 5px 12px rgba(0, 0, 0, 0.7);
+        }
+
+        .login-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .message {
+            display: none;
+
+            margin-top: 18px;
+            padding: 12px;
+
+            border-radius: 10px;
+
+            text-align: center;
+
+            font-size: 13px;
+            line-height: 1.4;
+        }
+
+        .message.success {
+            display: block;
+
+            background: #102414;
+            border: 1px solid #275b31;
+
+            color: #9de6a8;
+        }
+
+        .message.error {
+            display: block;
+
+            background: #241010;
+            border: 1px solid #5b2727;
+
+            color: #ff9d9d;
+        }
+
+        .bottom-links {
+            text-align: center;
+            margin-top: 24px;
+        }
+
+        .bottom-links a {
+            color: #aaa;
+
+            text-decoration: none;
+
+            font-size: 13px;
+        }
+
+        .bottom-links a:hover {
+            color: white;
+        }
+
+        .register {
+            margin-bottom: 12px;
+        }
+
+        .back a {
+            color: #777;
+        }
+
+        @media (max-width: 480px) {
+
+            .card {
+                padding: 25px 20px;
+            }
+
+            .logo h1 {
+                font-size: 29px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="logo">
+        <h1>QUEUELESS</h1>
+        <p>SMART QUEUE MANAGEMENT</p>
+    </div>
+
+    <div class="card">
+
+        <div class="title">
+            ADMIN LOGIN
+        </div>
+
+        <div class="subtitle">
+            Secure administrator access
+        </div>
+
+        <form id="loginForm">
+
+            <!-- ADMIN ID -->
+            <div class="field">
+
+                <label for="adminId">
+                    ADMIN ID
+                </label>
+
+                <div class="input-box">
+
+                    <span class="input-icon">
+                        ◉
+                    </span>
+
+                    <input
+                        type="text"
+                        id="adminId"
+                        placeholder="Enter admin ID"
+                        autocomplete="username"
+                        required
+                    >
+
+                </div>
+
+            </div>
+
+
+            <!-- PASSWORD -->
+            <div class="field">
+
+                <label for="password">
+                    PASSWORD
+                </label>
+
+                <div class="input-box">
+
+                    <span class="input-icon">
+                        🔒
+                    </span>
+
+                    <input
+                        type="password"
+                        id="password"
+                        placeholder="Enter password"
+                        autocomplete="current-password"
+                        required
+                    >
+
+                </div>
+
+            </div>
+
+
+            <!-- SECURITY MESSAGE -->
+            <div class="security-box">
+
+                <div class="security-title">
+                    🔐 ADMIN ACCESS PROTECTED
+                </div>
+
+                <div class="security-text">
+                    Admin registration requires a valid secret key.
+                    The secret key is not required during login.
+                </div>
+
+            </div>
+
+
+            <button
+                type="submit"
+                class="login-btn"
+                id="loginBtn"
+            >
+                ADMIN LOGIN
+            </button>
+
+
+            <div
+                id="message"
+                class="message"
+            ></div>
+
+        </form>
+
+
+        <div class="bottom-links">
+
+            <div class="register">
+
+                <a href="admin-register.html">
+                    Create Admin Account
+                </a>
+
+            </div>
+
+            <div class="back">
+
+                <a href="index.html">
+                    ← Back to Student Login
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+const API_URLS = [
+    "http://127.0.0.1:5000",
+    "http://localhost:5000"
+];
+
+const form =
+    document.getElementById("loginForm");
+
+const loginBtn =
+    document.getElementById("loginBtn");
+
+const message =
+    document.getElementById("message");
+
+
+function showMessage(text, type) {
+
+    message.textContent = text;
+
+    message.className =
+        "message " + type;
+}
+
+
+form.addEventListener(
+    "submit",
+    async function(event) {
+
+        event.preventDefault();
+
+        const adminId =
+            document
+                .getElementById("adminId")
+                .value
+                .trim();
+
+        const password =
+            document
+                .getElementById("password")
+                .value;
+
+
+        if (!adminId || !password) {
+
+            showMessage(
+                "Please enter Admin ID and password.",
+                "error"
+            );
+
+            return;
+        }
+
+
+        loginBtn.disabled = true;
+
+        loginBtn.textContent =
+            "LOGGING IN...";
+
+
+        try {
+
+            let response = null;
+            let connectionError = null;
+
+            for (const api of API_URLS) {
+                try {
+                    response = await fetch(
+                        api + "/api/admin-login",
+                        {
+                            method: "POST",
+                            mode: "cors",
+                            headers: {
+                                "Content-Type": "application/json"
+                            },
+                            body: JSON.stringify({
+                                admin_id: adminId,
+                                password: password
+                            })
+                        }
+                    );
+                    break;
+                } catch (err) {
+                    connectionError = err;
+                }
+            }
+
+            if (!response) {
+                throw connectionError || new Error("Unable to connect to Flask");
+            }
+
+
+            let data;
+
+            try {
+
+                data =
+                    await response.json();
+
+            } catch {
+
+                data = {
+                    message:
+                        "Invalid server response."
+                };
+
+            }
+
+
+            if (!response.ok) {
+
+                showMessage(
+                    data.message ||
+                    data.error ||
+                    "Invalid Admin ID or password.",
+                    "error"
+                );
+
+                loginBtn.disabled = false;
+
+                loginBtn.textContent =
+                    "ADMIN LOGIN";
+
+                return;
+            }
+
+
+            /*
+             * Save admin session information
+             */
+
+            localStorage.setItem(
+                "queuelessAdmin",
+                JSON.stringify(data.admin || data)
+            );
+
+
+            localStorage.setItem(
+                "admin_id",
+                data.admin_id ||
+                data.admin?.admin_id ||
+                adminId
+            );
+
+
+            localStorage.setItem(
+                "admin_name",
+                data.admin_name ||
+                data.admin?.admin_name ||
+                data.admin?.full_name ||
+                data.name ||
+                data.full_name ||
+                adminId
+            );
+
+
+            showMessage(
+                data.message ||
+                "Admin login successful.",
+                "success"
+            );
+
+
+            setTimeout(
+                function() {
+
+                    window.location.href =
+                        "admin.html";
+
+                },
+                700
+            );
+
+
+        } catch (error) {
+
+            console.error(
+                "Admin login error:",
+                error
+            );
+
+            showMessage(
+                "Cannot connect to QueueLess server. Make sure Flask is running.",
+                "error"
+            );
+
+            loginBtn.disabled = false;
+
+            loginBtn.textContent =
+                "ADMIN LOGIN";
+        }
+
+    }
+);
+
+</script>
+
+</body>
+</html>

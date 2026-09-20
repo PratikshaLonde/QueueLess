@@ -1,0 +1,4 @@
+﻿backend/queueless.db
+queueless.db
+__pycache__/
+*.pyc

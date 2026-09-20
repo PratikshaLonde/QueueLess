@@ -1,0 +1,919 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>QueueLess - Student Login</title>
+
+    <style>
+
+        *{
+            box-sizing:border-box;
+            margin:0;
+            padding:0;
+        }
+
+        body{
+            min-height:100vh;
+
+            display:flex;
+            align-items:center;
+            justify-content:center;
+
+            font-family:
+                Arial,
+                Helvetica,
+                sans-serif;
+
+            background:
+                radial-gradient(
+                    circle at 20% 30%,
+                    rgba(0,255,220,0.08),
+                    transparent 35%
+                ),
+                radial-gradient(
+                    circle at 80% 70%,
+                    rgba(0,100,255,0.08),
+                    transparent 35%
+                ),
+                #02070b;
+
+            color:white;
+
+            padding:20px;
+        }
+
+        .login-card{
+
+            width:100%;
+            max-width:540px;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    #191c22,
+                    #111318
+                );
+
+            border:1px solid #383d45;
+
+            border-radius:35px;
+
+            padding:
+                55px
+                48px
+                42px;
+
+            box-shadow:
+                0 0 50px rgba(0,0,0,0.65);
+
+        }
+
+        /* =================================================
+           LOGO
+        ================================================= */
+
+        .logo{
+
+            text-align:center;
+
+            font-size:46px;
+
+            font-weight:900;
+
+            letter-spacing:5px;
+
+            color:#ffffff;
+
+            text-shadow:
+                0 0 8px #ffffff,
+                0 0 18px rgba(0,255,240,0.75),
+                0 0 35px rgba(0,255,240,0.45);
+
+        }
+
+        .subtitle{
+
+            text-align:center;
+
+            margin-top:14px;
+
+            font-size:13px;
+
+            letter-spacing:5px;
+
+            color:#94a9c2;
+
+        }
+
+        /* =================================================
+           TITLE
+        ================================================= */
+
+        h1{
+
+            text-align:center;
+
+            margin-top:48px;
+
+            font-size:31px;
+
+        }
+
+        .login-description{
+
+            text-align:center;
+
+            color:#9baac0;
+
+            margin-top:10px;
+
+            margin-bottom:42px;
+
+            font-size:16px;
+
+        }
+
+        /* =================================================
+           FORM
+        ================================================= */
+
+        .field{
+
+            margin-bottom:28px;
+
+        }
+
+        .field label{
+
+            display:block;
+
+            margin-bottom:11px;
+
+            font-size:16px;
+
+            font-weight:700;
+
+            color:#e9edf4;
+
+        }
+
+        .input-wrapper{
+
+            position:relative;
+
+        }
+
+        .input-icon{
+
+            position:absolute;
+
+            left:24px;
+
+            top:50%;
+
+            transform:translateY(-50%);
+
+            font-size:20px;
+
+            z-index:2;
+
+        }
+
+        input{
+
+            width:100%;
+
+            height:66px;
+
+            border-radius:20px;
+
+            border:1px solid #343943;
+
+            outline:none;
+
+            background:#0d0f13;
+
+            color:white;
+
+            padding:
+                0 20px
+                0 57px;
+
+            font-size:17px;
+
+            transition:
+                border 0.2s,
+                box-shadow 0.2s;
+
+        }
+
+        input:focus{
+
+            border-color:#00e5d4;
+
+            box-shadow:
+                0 0 0 2px
+                rgba(0,229,212,0.12);
+
+        }
+
+        input::placeholder{
+
+            color:#687386;
+
+        }
+
+        /* =================================================
+           LOGIN BUTTON
+        ================================================= */
+
+        .login-btn{
+
+            width:100%;
+
+            height:68px;
+
+            border-radius:20px;
+
+            border:1px solid #00e5d4;
+
+            background:
+                linear-gradient(
+                    100deg,
+                    #075c58,
+                    #101a30
+                );
+
+            color:white;
+
+            font-size:18px;
+
+            font-weight:800;
+
+            cursor:pointer;
+
+            transition:
+                transform 0.2s,
+                box-shadow 0.2s,
+                opacity 0.2s;
+
+        }
+
+        .login-btn:hover{
+
+            transform:translateY(-2px);
+
+            box-shadow:
+                0 0 22px
+                rgba(0,229,212,0.25);
+
+        }
+
+        .login-btn:disabled{
+
+            opacity:0.55;
+
+            cursor:not-allowed;
+
+            transform:none;
+
+        }
+
+        /* =================================================
+           MESSAGE
+        ================================================= */
+
+        #message{
+
+            min-height:24px;
+
+            text-align:center;
+
+            margin-top:25px;
+
+            font-size:16px;
+
+        }
+
+        .error{
+
+            color:#ff4f68;
+
+        }
+
+        .success{
+
+            color:#00e5d4;
+
+        }
+
+        /* =================================================
+           BOTTOM
+        ================================================= */
+
+        .divider{
+
+            height:1px;
+
+            background:#30343b;
+
+            margin:
+                28px
+                0
+                30px;
+
+        }
+
+        .register-text{
+
+            text-align:center;
+
+            color:#8497b0;
+
+            font-size:16px;
+
+        }
+
+        .register-link{
+
+            color:#00e5d4;
+
+            font-weight:800;
+
+            text-decoration:none;
+
+            cursor:pointer;
+
+        }
+
+        .register-link:hover{
+
+            text-decoration:underline;
+
+        }
+
+        .back-link{
+
+            display:block;
+
+            text-align:center;
+
+            margin-top:30px;
+
+            color:#8094ad;
+
+            text-decoration:none;
+
+            font-size:16px;
+
+        }
+
+        .back-link:hover{
+
+            color:#00e5d4;
+
+        }
+
+        /* =================================================
+           RESPONSIVE
+        ================================================= */
+
+        @media(max-width:600px){
+
+            body{
+
+                padding:12px;
+
+            }
+
+            .login-card{
+
+                padding:
+                    40px
+                    25px
+                    32px;
+
+                border-radius:28px;
+
+            }
+
+            .logo{
+
+                font-size:35px;
+
+                letter-spacing:4px;
+
+            }
+
+            h1{
+
+                font-size:27px;
+
+                margin-top:38px;
+
+            }
+
+            .login-description{
+
+                font-size:14px;
+
+            }
+
+            input{
+
+                height:60px;
+
+            }
+
+            .login-btn{
+
+                height:62px;
+
+            }
+
+        }
+
+    </style>
+</head>
+
+
+<body>
+
+    <div class="login-card">
+
+        <!-- =================================================
+             LOGO
+        ================================================= -->
+
+        <div class="logo">
+            QUEUELESS
+        </div>
+
+        <div class="subtitle">
+            SMART QUEUE MANAGEMENT
+        </div>
+
+
+        <!-- =================================================
+             TITLE
+        ================================================= -->
+
+        <h1>
+            Student Portal
+        </h1>
+
+        <p class="login-description">
+            Login using your registered name
+        </p>
+
+
+        <!-- =================================================
+             LOGIN FORM
+        ================================================= -->
+
+        <form id="loginForm">
+
+            <!-- FULL NAME -->
+
+            <div class="field">
+
+                <label for="fullName">
+                    Full Name
+                </label>
+
+                <div class="input-wrapper">
+
+                    <span class="input-icon">
+                        🎓
+                    </span>
+
+                    <input
+                        type="text"
+                        id="fullName"
+                        name="full_name"
+                        placeholder="Enter your registered name"
+                        autocomplete="username"
+                        required
+                    >
+
+                </div>
+
+            </div>
+
+
+            <!-- PASSWORD -->
+
+            <div class="field">
+
+                <label for="password">
+                    Password
+                </label>
+
+                <div class="input-wrapper">
+
+                    <span class="input-icon">
+                        🔐
+                    </span>
+
+                    <input
+                        type="password"
+                        id="password"
+                        name="password"
+                        placeholder="Enter your password"
+                        autocomplete="current-password"
+                        required
+                    >
+
+                </div>
+
+            </div>
+
+
+            <!-- LOGIN BUTTON -->
+
+            <button
+                type="submit"
+                id="loginButton"
+                class="login-btn"
+            >
+                Login to Student Portal
+            </button>
+
+        </form>
+
+
+        <!-- MESSAGE -->
+
+        <div
+            id="message"
+        ></div>
+
+
+        <!-- =================================================
+             REGISTER
+        ================================================= -->
+
+        <div class="divider"></div>
+
+        <div class="register-text">
+
+            New student?
+
+            <a
+                href="register.html"
+                class="register-link"
+            >
+                Register here
+            </a>
+
+        </div>
+
+
+        <!-- BACK -->
+
+        <a
+            href="index.html"
+            class="back-link"
+        >
+            ← Back to Portal Selection
+        </a>
+
+    </div>
+
+
+    <!-- =====================================================
+         JAVASCRIPT
+    ===================================================== -->
+
+    <script>
+
+        const API =
+            "http://127.0.0.1:5000";
+
+
+        const loginForm =
+            document.getElementById(
+                "loginForm"
+            );
+
+        const loginButton =
+            document.getElementById(
+                "loginButton"
+            );
+
+        const message =
+            document.getElementById(
+                "message"
+            );
+
+
+        // =================================================
+        // SHOW MESSAGE
+        // =================================================
+
+        function showMessage(
+            text,
+            type
+        ){
+
+            message.textContent =
+                text;
+
+            message.className =
+                type;
+
+        }
+
+
+        // =================================================
+        // LOGIN
+        // =================================================
+
+        loginForm.addEventListener(
+            "submit",
+            async function(event){
+
+                event.preventDefault();
+
+
+                const fullName =
+                    document
+                        .getElementById(
+                            "fullName"
+                        )
+                        .value
+                        .trim();
+
+
+                const password =
+                    document
+                        .getElementById(
+                            "password"
+                        )
+                        .value
+                        .trim();
+
+
+                if(!fullName){
+
+                    showMessage(
+                        "Please enter your full name.",
+                        "error"
+                    );
+
+                    return;
+
+                }
+
+
+                if(!password){
+
+                    showMessage(
+                        "Please enter your password.",
+                        "error"
+                    );
+
+                    return;
+
+                }
+
+
+                loginButton.disabled =
+                    true;
+
+                loginButton.textContent =
+                    "Logging in...";
+
+
+                showMessage(
+                    "",
+                    ""
+                );
+
+
+                try{
+
+                    const response =
+                        await fetch(
+                            API +
+                            "/api/login",
+                            {
+                                method:"POST",
+
+                                headers:{
+                                    "Content-Type":
+                                        "application/json"
+                                },
+
+                                body:JSON.stringify({
+
+                                    full_name:
+                                        fullName,
+
+                                    name:
+                                        fullName,
+
+                                    password:
+                                        password
+
+                                })
+                            }
+                        );
+
+
+                    const contentType =
+                        response
+                            .headers
+                            .get(
+                                "content-type"
+                            ) || "";
+
+
+                    let data;
+
+
+                    if(
+                        contentType
+                            .toLowerCase()
+                            .includes(
+                                "application/json"
+                            )
+                    ){
+
+                        data =
+                            await response.json();
+
+                    }
+                    else{
+
+                        const text =
+                            await response.text();
+
+                        throw new Error(
+                            "Server returned an unexpected response."
+                        );
+
+                    }
+
+
+                    if(!response.ok){
+
+                        throw new Error(
+                            data.message ||
+                            data.error ||
+                            "Invalid name/ID or password."
+                        );
+
+                    }
+
+
+                    if(
+                        !data.success
+                    ){
+
+                        throw new Error(
+                            data.message ||
+                            "Invalid name/ID or password."
+                        );
+
+                    }
+
+
+                    // =================================================
+                    // GET STUDENT DATA
+                    // =================================================
+
+                    const student =
+                        data.student ||
+                        data.user ||
+                        data;
+
+
+                    const studentId =
+                        student.id ||
+                        student.student_id ||
+                        student.studentId ||
+                        "";
+
+
+                    const studentName =
+                        student.full_name ||
+                        student.name ||
+                        fullName;
+
+
+                    // =================================================
+                    // SAVE LOGIN DATA
+                    // =================================================
+
+                    localStorage.setItem(
+                        "student",
+                        JSON.stringify(
+                            student
+                        )
+                    );
+
+
+                    localStorage.setItem(
+                        "studentId",
+                        String(
+                            studentId
+                        )
+                    );
+
+
+                    localStorage.setItem(
+                        "studentName",
+                        studentName
+                    );
+
+
+                    localStorage.setItem(
+                        "loggedIn",
+                        "true"
+                    );
+
+
+                    showMessage(
+                        "Login successful. Opening dashboard...",
+                        "success"
+                    );
+
+
+                    // =================================================
+                    // OPEN DASHBOARD
+                    // =================================================
+
+                    setTimeout(
+                        function(){
+
+                            window.location.href =
+                                "dashboard.html";
+
+                        },
+                        500
+                    );
+
+
+                }
+                catch(error){
+
+                    console.error(
+                        "Student Login Error:",
+                        error
+                    );
+
+
+                    showMessage(
+                        error.message ||
+                        "Unable to login.",
+                        "error"
+                    );
+
+
+                    loginButton.disabled =
+                        false;
+
+                    loginButton.textContent =
+                        "Login to Student Portal";
+
+                }
+
+            }
+        );
+
+
+        // =================================================
+        // ENTER KEY
+        // =================================================
+
+        document
+            .getElementById(
+                "password"
+            )
+            .addEventListener(
+                "keydown",
+                function(event){
+
+                    if(
+                        event.key ===
+                        "Enter"
+                    ){
+
+                        loginForm.requestSubmit();
+
+                    }
+
+                }
+            );
+
+    </script>
+
+</body>
+</html>

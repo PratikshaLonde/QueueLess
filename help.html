@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QueueLess - Help</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        body {
+            background:
+                radial-gradient(circle at top left, #202020 0%, #090909 38%, #000 100%);
+            color: white;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* SIDEBAR */
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 245px;
+            height: 100vh;
+            padding: 30px 18px;
+            background: linear-gradient(145deg, #151515, #050505);
+            border-right: 1px solid #333;
+            box-shadow: 8px 0 30px rgba(255,255,255,0.04);
+            z-index: 100;
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 42px;
+        }
+
+        .logo h1 {
+            font-size: 29px;
+            letter-spacing: 2px;
+            color: white;
+            text-shadow:
+                0 0 8px white,
+                0 0 18px rgba(255,255,255,0.45);
+        }
+
+        .logo p {
+            margin-top: 7px;
+            font-size: 11px;
+            color: #777;
+            letter-spacing: 2px;
+        }
+
+        .nav {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .nav a {
+            text-decoration: none;
+            color: #aaa;
+            padding: 14px 17px;
+            border-radius: 12px;
+            font-size: 15px;
+            transition: 0.25s;
+            border: 1px solid transparent;
+        }
+
+        .nav a:hover,
+        .nav a.active {
+            color: white;
+            background: linear-gradient(145deg, #252525, #101010);
+            border: 1px solid #444;
+            box-shadow:
+                inset 2px 2px 5px rgba(255,255,255,0.06),
+                inset -3px -3px 7px rgba(0,0,0,0.9),
+                0 0 14px rgba(255,255,255,0.08);
+            transform: translateX(4px);
+        }
+
+        .logout {
+            position: absolute;
+            bottom: 30px;
+            left: 18px;
+            right: 18px;
+            text-align: center;
+            padding: 13px;
+            border-radius: 12px;
+            background: linear-gradient(145deg, #222, #090909);
+            border: 1px solid #3d3d3d;
+            color: #ccc;
+            cursor: pointer;
+            transition: 0.25s;
+        }
+
+        .logout:hover {
+            color: white;
+            box-shadow: 0 0 18px rgba(255,255,255,0.12);
+            transform: translateY(-2px);
+        }
+
+        /* MAIN */
+        .main {
+            margin-left: 245px;
+            padding: 38px 45px;
+            min-height: 100vh;
+        }
+
+        .top {
+            margin-bottom: 30px;
+        }
+
+        .top h2 {
+            font-size: 31px;
+            margin-bottom: 8px;
+        }
+
+        .top p {
+            color: #888;
+            font-size: 14px;
+        }
+
+        /* SEARCH */
+        .search-box {
+            margin-bottom: 30px;
+        }
+
+        .search-box input {
+            width: 100%;
+            max-width: 720px;
+            padding: 17px 20px;
+            border-radius: 14px;
+            border: 1px solid #3b3b3b;
+            outline: none;
+            background: linear-gradient(145deg, #202020, #090909);
+            color: white;
+            font-size: 15px;
+            box-shadow:
+                inset 3px 3px 8px rgba(0,0,0,0.8),
+                inset -2px -2px 5px rgba(255,255,255,0.04);
+            transition: 0.25s;
+        }
+
+        .search-box input:focus {
+            border-color: #777;
+            box-shadow:
+                0 0 18px rgba(255,255,255,0.08),
+                inset 3px 3px 8px rgba(0,0,0,0.8);
+        }
+
+        .search-box input::placeholder {
+            color: #666;
+        }
+
+        /* FAQ */
+        .section-title {
+            font-size: 19px;
+            margin-bottom: 17px;
+        }
+
+        .faq-container {
+            max-width: 900px;
+        }
+
+        .faq {
+            margin-bottom: 13px;
+            border-radius: 14px;
+            overflow: hidden;
+            border: 1px solid #303030;
+            background: linear-gradient(145deg, #191919, #080808);
+            box-shadow:
+                5px 5px 12px rgba(0,0,0,0.7),
+                -2px -2px 8px rgba(255,255,255,0.025);
+        }
+
+        .faq-question {
+            padding: 18px 20px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: #eee;
+            font-size: 15px;
+            transition: 0.2s;
+        }
+
+        .faq-question:hover {
+            background: rgba(255,255,255,0.035);
+        }
+
+        .arrow {
+            font-size: 18px;
+            color: #777;
+            transition: 0.25s;
+        }
+
+        .faq.open .arrow {
+            transform: rotate(90deg);
+            color: white;
+        }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            color: #888;
+            font-size: 14px;
+            line-height: 1.7;
+            transition: max-height 0.3s ease;
+            padding: 0 20px;
+        }
+
+        .faq.open .faq-answer {
+            max-height: 200px;
+            padding-bottom: 18px;
+        }
+
+        /* SUPPORT */
+        .support {
+            margin-top: 32px;
+            max-width: 900px;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 18px;
+        }
+
+        .support-card {
+            padding: 23px;
+            border-radius: 16px;
+            background: linear-gradient(145deg, #1d1d1d, #080808);
+            border: 1px solid #333;
+            box-shadow:
+                7px 7px 15px rgba(0,0,0,0.7),
+                -3px -3px 10px rgba(255,255,255,0.025);
+            transition: 0.25s;
+        }
+
+        .support-card:hover {
+            transform: translateY(-4px);
+            border-color: #555;
+            box-shadow:
+                0 0 20px rgba(255,255,255,0.07),
+                7px 7px 15px rgba(0,0,0,0.7);
+        }
+
+        .support-card h3 {
+            font-size: 17px;
+            margin-bottom: 9px;
+        }
+
+        .support-card p {
+            color: #888;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        .support-card strong {
+            display: block;
+            margin-top: 12px;
+            color: #ddd;
+        }
+
+        /* NO RESULT */
+        .no-result {
+            display: none;
+            color: #777;
+            padding: 20px 0;
+        }
+
+        /* MOBILE */
+        @media (max-width: 850px) {
+            .sidebar {
+                width: 200px;
+            }
+
+            .main {
+                margin-left: 200px;
+                padding: 30px;
+            }
+
+            .support {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 650px) {
+            .sidebar {
+                position: relative;
+                width: 100%;
+                height: auto;
+                padding: 20px;
+            }
+
+            .logo {
+                margin-bottom: 20px;
+            }
+
+            .nav {
+                flex-direction: row;
+                flex-wrap: wrap;
+            }
+
+            .nav a {
+                padding: 10px 12px;
+            }
+
+            .logout {
+                position: static;
+                margin-top: 15px;
+            }
+
+            .main {
+                margin-left: 0;
+                padding: 25px 18px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+
+        <div class="logo">
+            <h1>QUEUELESS</h1>
+            <p>SMART QUEUE MANAGEMENT</p>
+        </div>
+
+        <nav class="nav">
+            <a href="dashboard.html">Dashboard</a>
+            <a href="services.html">College Services</a>
+            <a href="myqueue.html">My Queue</a>
+            <a href="feedback.html">Feedback</a>
+            <a href="help.html" class="active">Help</a>
+        </nav>
+
+        <div class="logout" onclick="logout()">
+            Logout
+        </div>
+
+    </aside>
+
+
+    <!-- MAIN -->
+    <main class="main">
+
+        <div class="top">
+            <h2>Help & Support</h2>
+            <p>Find answers to common questions about QueueLess.</p>
+        </div>
+
+
+        <!-- SEARCH -->
+        <div class="search-box">
+            <input
+                type="text"
+                id="searchInput"
+                placeholder="Search your question..."
+                onkeyup="searchFAQ()"
+            >
+        </div>
+
+
+        <!-- FAQ -->
+        <h3 class="section-title">Frequently Asked Questions</h3>
+
+        <div class="faq-container" id="faqContainer">
+
+            <div class="faq">
+                <div class="faq-question" onclick="toggleFAQ(this)">
+                    <span>How do I join a queue?</span>
+                    <span class="arrow">›</span>
+                </div>
+
+                <div class="faq-answer">
+                    Open <b>College Services</b>, choose the service you need,
+                    and click the <b>Join Queue</b> button. Your queue number
+                    will be generated automatically.
+                </div>
+            </div>
+
+
+            <div class="faq">
+                <div class="faq-question" onclick="toggleFAQ(this)">
+                    <span>Where can I see my queue position?</span>
+                    <span class="arrow">›</span>
+                </div>
+
+                <div class="faq-answer">
+                    Open <b>My Queue</b> from the sidebar. You can see your
+                    queue number, position, people ahead of you and estimated
+                    waiting time.
+                </div>
+            </div>
+
+
+            <div class="faq">
+                <div class="faq-question" onclick="toggleFAQ(this)">
+                    <span>Can I leave a queue?</span>
+                    <span class="arrow">›</span>
+                </div>
+
+                <div class="faq-answer">
+                    Yes. Open <b>My Queue</b> and select the queue you want
+                    to leave. Click <b>Leave Queue</b> to remove yourself
+                    from that active queue.
+                </div>
+            </div>
+
+
+            <div class="faq">
+                <div class="faq-question" onclick="toggleFAQ(this)">
+                    <span>Can I join more than one queue?</span>
+                    <span class="arrow">›</span>
+                </div>
+
+                <div class="faq-answer">
+                    Yes. QueueLess allows you to join different college
+                    services at the same time, as long as you do not already
+                    have an active queue for the same service.
+                </div>
+            </div>
+
+
+            <div class="faq">
+                <div class="faq-question" onclick="toggleFAQ(this)">
+                    <span>How will I know when my turn is near?</span>
+                    <span class="arrow">›</span>
+                </div>
+
+                <div class="faq-answer">
+                    QueueLess continuously updates your queue position.
+                    Notifications can be shown when your turn is approaching.
+                </div>
+            </div>
+
+
+            <div class="faq">
+                <div class="faq-question" onclick="toggleFAQ(this)">
+                    <span>What happens when my turn arrives?</span>
+                    <span class="arrow">›</span>
+                </div>
+
+                <div class="faq-answer">
+                    The Queue Manager calls the next waiting student.
+                    Your queue status changes as the queue progresses.
+                </div>
+            </div>
+
+
+            <div class="faq">
+                <div class="faq-question" onclick="toggleFAQ(this)">
+                    <span>How can I give feedback?</span>
+                    <span class="arrow">›</span>
+                </div>
+
+                <div class="faq-answer">
+                    Open <b>Feedback</b> from the sidebar. Select a star
+                    rating, write your comments and click <b>Submit Feedback</b>.
+                </div>
+            </div>
+
+
+            <div class="faq">
+                <div class="faq-question" onclick="toggleFAQ(this)">
+                    <span>What should I do if something is not working?</span>
+                    <span class="arrow">›</span>
+                </div>
+
+                <div class="faq-answer">
+                    First refresh the page and make sure you are logged in.
+                    If the problem continues, contact the QueueLess support
+                    team using the support options below.
+                </div>
+            </div>
+
+        </div>
+
+        <div class="no-result" id="noResult">
+            No matching questions found.
+        </div>
+
+
+        <!-- SUPPORT -->
+        <h3 class="section-title" style="margin-top:35px;">
+            Need More Help?
+        </h3>
+
+        <div class="support">
+
+            <div class="support-card">
+                <h3>QueueLess Support</h3>
+                <p>
+                    Having trouble with queues, login or college services?
+                    Contact the support team for assistance.
+                </p>
+                <strong>support@queueless.com</strong>
+            </div>
+
+
+            <div class="support-card">
+                <h3>Queue Manager</h3>
+                <p>
+                    For issues related to a specific college service or
+                    queue, contact the Queue Manager at your college.
+                </p>
+                <strong>Available during college hours</strong>
+            </div>
+
+        </div>
+
+    </main>
+
+
+    <script>
+
+        function toggleFAQ(element) {
+            const faq = element.parentElement;
+
+            document.querySelectorAll(".faq").forEach(item => {
+                if (item !== faq) {
+                    item.classList.remove("open");
+                }
+            });
+
+            faq.classList.toggle("open");
+        }
+
+
+        function searchFAQ() {
+
+            const search =
+                document.getElementById("searchInput")
+                .value
+                .toLowerCase()
+                .trim();
+
+            const faqs =
+                document.querySelectorAll(".faq");
+
+            let found = false;
+
+            faqs.forEach(faq => {
+
+                const text =
+                    faq.innerText.toLowerCase();
+
+                if (text.includes(search)) {
+                    faq.style.display = "block";
+                    found = true;
+                } else {
+                    faq.style.display = "none";
+                }
+
+            });
+
+            document.getElementById("noResult").style.display =
+                found ? "none" : "block";
+        }
+
+
+        function logout() {
+
+            localStorage.removeItem("studentId");
+            localStorage.removeItem("student_id");
+            localStorage.removeItem("collegeId");
+            localStorage.removeItem("studentName");
+            localStorage.removeItem("student");
+
+            window.location.href = "index.html";
+        }
+
+    </script>
+
+</body>
+</html>

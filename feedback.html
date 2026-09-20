@@ -1,0 +1,1495 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
+
+<title>QueueLess - Feedback</title>
+
+<style>
+
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+body{
+
+    min-height:100vh;
+
+    font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
+
+    background:
+        radial-gradient(
+            circle at 10% 20%,
+            rgba(0,255,220,.08),
+            transparent 30%
+        ),
+        radial-gradient(
+            circle at 90% 80%,
+            rgba(0,120,255,.08),
+            transparent 30%
+        ),
+        #02070b;
+
+    color:white;
+
+    padding:25px;
+}
+
+/* =====================================================
+   HEADER
+===================================================== */
+
+.header{
+
+    max-width:1200px;
+
+    margin:0 auto 25px;
+
+    padding:20px 25px;
+
+    border:1px solid #252a31;
+
+    border-radius:20px;
+
+    background:#11151b;
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+}
+
+.logo{
+
+    font-size:27px;
+
+    font-weight:900;
+
+    letter-spacing:4px;
+
+    text-shadow:
+        0 0 10px #00e5d4,
+        0 0 25px rgba(0,229,212,.4);
+
+}
+
+.student-name{
+
+    color:#a7b7ca;
+
+    font-size:15px;
+
+}
+
+.student-name span{
+
+    color:#00e5d4;
+
+    font-weight:800;
+
+}
+
+/* =====================================================
+   MAIN
+===================================================== */
+
+.container{
+
+    max-width:1200px;
+
+    margin:auto;
+
+    display:grid;
+
+    grid-template-columns:
+        minmax(320px,420px)
+        1fr;
+
+    gap:25px;
+
+}
+
+/* =====================================================
+   CARD
+===================================================== */
+
+.card{
+
+    background:
+        linear-gradient(
+            145deg,
+            #171a20,
+            #0e1116
+        );
+
+    border:1px solid #292f37;
+
+    border-radius:25px;
+
+    padding:30px;
+
+    box-shadow:
+        0 20px 50px rgba(0,0,0,.35);
+
+}
+
+.card h2{
+
+    font-size:25px;
+
+    margin-bottom:8px;
+
+}
+
+.description{
+
+    color:#8f9eb1;
+
+    line-height:1.5;
+
+    margin-bottom:25px;
+
+}
+
+/* =====================================================
+   FORM
+===================================================== */
+
+label{
+
+    display:block;
+
+    color:#cbd5e1;
+
+    font-weight:700;
+
+    margin-bottom:9px;
+
+}
+
+select,
+textarea{
+
+    width:100%;
+
+    border-radius:15px;
+
+    border:1px solid #333a44;
+
+    background:#090b0f;
+
+    color:white;
+
+    outline:none;
+
+    padding:15px;
+
+    font-size:15px;
+
+    margin-bottom:20px;
+
+}
+
+select{
+
+    height:52px;
+
+}
+
+textarea{
+
+    min-height:140px;
+
+    resize:vertical;
+
+}
+
+select:focus,
+textarea:focus{
+
+    border-color:#00e5d4;
+
+    box-shadow:
+        0 0 0 2px
+        rgba(0,229,212,.1);
+
+}
+
+/* =====================================================
+   STARS
+===================================================== */
+
+.stars{
+
+    display:flex;
+
+    gap:8px;
+
+    margin-bottom:25px;
+
+}
+
+.star{
+
+    width:46px;
+
+    height:46px;
+
+    border-radius:12px;
+
+    border:1px solid #353b45;
+
+    background:#0a0c10;
+
+    color:#4d5665;
+
+    font-size:23px;
+
+    cursor:pointer;
+
+    transition:.2s;
+
+}
+
+.star:hover{
+
+    border-color:#00e5d4;
+
+    color:#00e5d4;
+
+}
+
+.star.active{
+
+    background:#083d3a;
+
+    border-color:#00e5d4;
+
+    color:#00e5d4;
+
+    box-shadow:
+        0 0 15px
+        rgba(0,229,212,.2);
+
+}
+
+/* =====================================================
+   BUTTON
+===================================================== */
+
+.submit-btn{
+
+    width:100%;
+
+    height:56px;
+
+    border-radius:15px;
+
+    border:1px solid #00e5d4;
+
+    background:
+        linear-gradient(
+            100deg,
+            #075b57,
+            #101a30
+        );
+
+    color:white;
+
+    font-size:16px;
+
+    font-weight:800;
+
+    cursor:pointer;
+
+}
+
+.submit-btn:hover{
+
+    box-shadow:
+        0 0 20px
+        rgba(0,229,212,.2);
+
+}
+
+.submit-btn:disabled{
+
+    opacity:.5;
+
+    cursor:not-allowed;
+
+}
+
+/* =====================================================
+   MESSAGE
+===================================================== */
+
+#message{
+
+    min-height:22px;
+
+    text-align:center;
+
+    margin-top:15px;
+
+    font-weight:700;
+
+}
+
+.success{
+
+    color:#00e5d4;
+
+}
+
+.error{
+
+    color:#ff536b;
+
+}
+
+/* =====================================================
+   FEEDBACK LIST
+===================================================== */
+
+.feedback-header{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    margin-bottom:20px;
+
+}
+
+.count{
+
+    padding:7px 13px;
+
+    border-radius:20px;
+
+    background:#083d3a;
+
+    border:1px solid #00e5d4;
+
+    color:#00e5d4;
+
+    font-weight:800;
+
+}
+
+.feedback-list{
+
+    max-height:650px;
+
+    overflow-y:auto;
+
+    padding-right:8px;
+
+}
+
+.feedback-list::-webkit-scrollbar{
+
+    width:6px;
+
+}
+
+.feedback-list::-webkit-scrollbar-track{
+
+    background:#080a0d;
+
+}
+
+.feedback-list::-webkit-scrollbar-thumb{
+
+    background:#39414c;
+
+    border-radius:10px;
+
+}
+
+.feedback-item{
+
+    border:1px solid #282e36;
+
+    border-radius:18px;
+
+    padding:20px;
+
+    margin-bottom:15px;
+
+    background:#0b0e13;
+
+}
+
+.feedback-top{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:flex-start;
+
+    gap:15px;
+
+}
+
+.service-name{
+
+    color:#00e5d4;
+
+    font-weight:800;
+
+    font-size:16px;
+
+}
+
+.date{
+
+    color:#718096;
+
+    font-size:12px;
+
+}
+
+.rating{
+
+    color:#ffd54a;
+
+    margin-top:8px;
+
+    letter-spacing:2px;
+
+}
+
+.feedback-message{
+
+    margin-top:13px;
+
+    color:#c7d0dc;
+
+    line-height:1.6;
+
+    word-break:break-word;
+
+}
+
+.delete-btn{
+
+    margin-top:15px;
+
+    border:1px solid #542630;
+
+    background:#241015;
+
+    color:#ff647a;
+
+    padding:8px 13px;
+
+    border-radius:10px;
+
+    cursor:pointer;
+
+}
+
+.delete-btn:hover{
+
+    background:#35151d;
+
+}
+
+.empty{
+
+    text-align:center;
+
+    color:#758398;
+
+    padding:60px 20px;
+
+}
+
+/* =====================================================
+   BACK
+===================================================== */
+
+.back{
+
+    display:inline-block;
+
+    margin-top:25px;
+
+    color:#8194ab;
+
+    text-decoration:none;
+
+}
+
+.back:hover{
+
+    color:#00e5d4;
+
+}
+
+/* =====================================================
+   MOBILE
+===================================================== */
+
+@media(max-width:850px){
+
+    body{
+
+        padding:15px;
+
+    }
+
+    .container{
+
+        grid-template-columns:1fr;
+
+    }
+
+    .header{
+
+        flex-direction:column;
+
+        gap:10px;
+
+        text-align:center;
+
+    }
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<!-- =====================================================
+     HEADER
+===================================================== -->
+
+<header class="header">
+
+    <div class="logo">
+        QUEUELESS
+    </div>
+
+    <div class="student-name">
+
+        Welcome,
+        <span id="studentName">
+            Student
+        </span>
+
+    </div>
+
+</header>
+
+
+<!-- =====================================================
+     MAIN
+===================================================== -->
+
+<main class="container">
+
+
+<!-- =====================================================
+     GIVE FEEDBACK
+===================================================== -->
+
+<section class="card">
+
+    <h2>
+        Give Feedback
+    </h2>
+
+    <p class="description">
+        Tell us about your QueueLess experience.
+        Your feedback helps improve the service.
+    </p>
+
+
+    <label for="service">
+        Service
+    </label>
+
+    <select id="service">
+
+        <option value="">
+            Select a service
+        </option>
+
+    </select>
+
+
+    <label>
+        Rating
+    </label>
+
+    <div class="stars">
+
+        <button
+            type="button"
+            class="star active"
+            data-rating="1"
+        >
+            ★
+        </button>
+
+        <button
+            type="button"
+            class="star active"
+            data-rating="2"
+        >
+            ★
+        </button>
+
+        <button
+            type="button"
+            class="star active"
+            data-rating="3"
+        >
+            ★
+        </button>
+
+        <button
+            type="button"
+            class="star active"
+            data-rating="4"
+        >
+            ★
+        </button>
+
+        <button
+            type="button"
+            class="star active"
+            data-rating="5"
+        >
+            ★
+        </button>
+
+    </div>
+
+
+    <label for="feedback">
+        Your Feedback
+    </label>
+
+    <textarea
+        id="feedback"
+        maxlength="500"
+        placeholder="Write your feedback here..."
+    ></textarea>
+
+
+    <button
+        id="submitBtn"
+        class="submit-btn"
+    >
+        Submit Feedback
+    </button>
+
+
+    <div id="message"></div>
+
+
+    <a
+        href="dashboard.html"
+        class="back"
+    >
+        ← Back to Dashboard
+    </a>
+
+</section>
+
+
+<!-- =====================================================
+     MY FEEDBACK
+===================================================== -->
+
+<section class="card">
+
+    <div class="feedback-header">
+
+        <h2>
+            My Feedback
+        </h2>
+
+        <span
+            id="feedbackCount"
+            class="count"
+        >
+            0
+        </span>
+
+    </div>
+
+
+    <div
+        id="feedbackList"
+        class="feedback-list"
+    >
+
+        <div class="empty">
+            Loading your feedback...
+        </div>
+
+    </div>
+
+</section>
+
+
+</main>
+
+
+<script>
+
+/* =====================================================
+   API
+===================================================== */
+
+const API =
+    "http://127.0.0.1:5000";
+
+
+/* =====================================================
+   STUDENT DATA
+===================================================== */
+
+const studentData =
+    JSON.parse(
+        localStorage.getItem(
+            "student"
+        ) || "{}"
+    );
+
+
+const studentId =
+    localStorage.getItem(
+        "studentId"
+    ) ||
+    studentData.student_id ||
+    studentData.id ||
+    "";
+
+
+const studentName =
+    localStorage.getItem(
+        "studentName"
+    ) ||
+    studentData.full_name ||
+    studentData.name ||
+    "Student";
+
+
+document.getElementById(
+    "studentName"
+).textContent =
+    studentName;
+
+
+/* =====================================================
+   ELEMENTS
+===================================================== */
+
+const serviceSelect =
+    document.getElementById(
+        "service"
+    );
+
+const feedbackInput =
+    document.getElementById(
+        "feedback"
+    );
+
+const submitBtn =
+    document.getElementById(
+        "submitBtn"
+    );
+
+const message =
+    document.getElementById(
+        "message"
+    );
+
+const feedbackList =
+    document.getElementById(
+        "feedbackList"
+    );
+
+const feedbackCount =
+    document.getElementById(
+        "feedbackCount"
+    );
+
+const stars =
+    document.querySelectorAll(
+        ".star"
+    );
+
+
+let selectedRating = 5;
+
+
+/* =====================================================
+   STARS
+===================================================== */
+
+stars.forEach(
+    star => {
+
+        star.addEventListener(
+            "click",
+            function(){
+
+                selectedRating =
+                    Number(
+                        this.dataset.rating
+                    );
+
+                stars.forEach(
+                    item => {
+
+                        const rating =
+                            Number(
+                                item.dataset.rating
+                            );
+
+                        item.classList.toggle(
+                            "active",
+                            rating <= selectedRating
+                        );
+
+                    }
+                );
+
+            }
+        );
+
+    }
+);
+
+
+/* =====================================================
+   LOAD SERVICES
+===================================================== */
+
+async function loadServices(){
+
+    try{
+
+        const response =
+            await fetch(
+                API +
+                "/api/services?t=" +
+                Date.now()
+            );
+
+        const data =
+            await response.json();
+
+        const services =
+            Array.isArray(data)
+                ? data
+                : data.services || [];
+
+        serviceSelect.innerHTML =
+            `<option value="">
+                Select a service
+            </option>`;
+
+        services.forEach(
+            service => {
+
+                const option =
+                    document.createElement(
+                        "option"
+                    );
+
+                option.value =
+                    service.id ||
+                    service.service_id;
+
+                option.textContent =
+                    service.name ||
+                    service.service_name;
+
+                serviceSelect.appendChild(
+                    option
+                );
+
+            }
+        );
+
+    }
+    catch(error){
+
+        console.error(
+            "Service loading error:",
+            error
+        );
+
+    }
+
+}
+
+
+/* =====================================================
+   SUBMIT FEEDBACK
+===================================================== */
+
+submitBtn.addEventListener(
+    "click",
+    submitFeedback
+);
+
+
+async function submitFeedback(){
+
+    const serviceId =
+        serviceSelect.value;
+
+    const feedback =
+        feedbackInput.value.trim();
+
+
+    if(!studentId){
+
+        showMessage(
+            "Student login information is missing.",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    if(!serviceId){
+
+        showMessage(
+            "Please select a service.",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    if(!feedback){
+
+        showMessage(
+            "Please enter your feedback.",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    submitBtn.disabled =
+        true;
+
+    submitBtn.textContent =
+        "Submitting...";
+
+
+    try{
+
+        const response =
+            await fetch(
+                API +
+                "/api/feedback",
+                {
+                    method:"POST",
+
+                    headers:{
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body:JSON.stringify({
+
+                        student_id:
+                            Number(studentId),
+
+                        service_id:
+                            Number(serviceId),
+
+                        rating:
+                            selectedRating,
+
+                        message:
+                            feedback,
+
+                        feedback:
+                            feedback
+
+                    })
+                }
+            );
+
+
+        const data =
+            await response.json();
+
+
+        if(!response.ok){
+
+            throw new Error(
+                data.message ||
+                "Unable to submit feedback."
+            );
+
+        }
+
+
+        showMessage(
+            data.message ||
+            "Feedback submitted successfully.",
+            "success"
+        );
+
+
+        feedbackInput.value = "";
+
+        serviceSelect.value = "";
+
+        selectedRating = 5;
+
+        stars.forEach(
+            star => {
+
+                star.classList.add(
+                    "active"
+                );
+
+            }
+        );
+
+
+        await loadFeedback();
+
+    }
+    catch(error){
+
+        console.error(
+            "Feedback error:",
+            error
+        );
+
+        showMessage(
+            error.message ||
+            "Unable to submit feedback.",
+            "error"
+        );
+
+    }
+    finally{
+
+        submitBtn.disabled =
+            false;
+
+        submitBtn.textContent =
+            "Submit Feedback";
+
+    }
+
+}
+
+
+/* =====================================================
+   LOAD MY FEEDBACK
+===================================================== */
+
+async function loadFeedback(){
+
+    if(!studentId){
+
+        feedbackList.innerHTML =
+            `<div class="empty">
+                Please login again.
+            </div>`;
+
+        return;
+
+    }
+
+
+    try{
+
+        const response =
+            await fetch(
+                API +
+                "/api/feedback?student_id=" +
+                encodeURIComponent(
+                    studentId
+                ) +
+                "&t=" +
+                Date.now()
+            );
+
+
+        const data =
+            await response.json();
+
+
+        if(!response.ok){
+
+            throw new Error(
+                data.message ||
+                "Unable to load feedback."
+            );
+
+        }
+
+
+        const feedback =
+            Array.isArray(
+                data
+            )
+                ? data
+                : data.feedback || [];
+
+
+        renderFeedback(
+            feedback
+        );
+
+    }
+    catch(error){
+
+        console.error(
+            "Feedback loading error:",
+            error
+        );
+
+        feedbackList.innerHTML =
+            `<div class="empty">
+                Unable to load feedback.
+            </div>`;
+
+    }
+
+}
+
+
+/* =====================================================
+   RENDER FEEDBACK
+===================================================== */
+
+function renderFeedback(
+    feedback
+){
+
+    feedbackCount.textContent =
+        feedback.length;
+
+
+    if(!feedback.length){
+
+        feedbackList.innerHTML =
+            `<div class="empty">
+                You have not submitted any feedback yet.
+            </div>`;
+
+        return;
+
+    }
+
+
+    feedbackList.innerHTML =
+        "";
+
+
+    feedback.forEach(
+        item => {
+
+            const rating =
+                Number(
+                    item.rating || 5
+                );
+
+
+            const starsText =
+                "★".repeat(
+                    rating
+                ) +
+                "☆".repeat(
+                    5 - rating
+                );
+
+
+            const service =
+                item.service_name ||
+                "Service";
+
+
+            const msg =
+                item.message ||
+                item.feedback ||
+                "";
+
+
+            const date =
+                formatDate(
+                    item.created_at
+                );
+
+
+            const div =
+                document.createElement(
+                    "div"
+                );
+
+            div.className =
+                "feedback-item";
+
+
+            div.innerHTML = `
+
+                <div class="feedback-top">
+
+                    <div>
+
+                        <div class="service-name">
+                            ${escapeHTML(service)}
+                        </div>
+
+                        <div class="rating">
+                            ${starsText}
+                        </div>
+
+                    </div>
+
+                    <div class="date">
+                        ${escapeHTML(date)}
+                    </div>
+
+                </div>
+
+                <div class="feedback-message">
+                    ${escapeHTML(msg)}
+                </div>
+
+                <button
+                    class="delete-btn"
+                    onclick="deleteFeedback(${item.id})"
+                >
+                    Delete Feedback
+                </button>
+
+            `;
+
+
+            feedbackList.appendChild(
+                div
+            );
+
+        }
+    );
+
+}
+
+
+/* =====================================================
+   DELETE FEEDBACK
+===================================================== */
+
+async function deleteFeedback(
+    feedbackId
+){
+
+    if(
+        !confirm(
+            "Delete this feedback?"
+        )
+    ){
+
+        return;
+
+    }
+
+
+    try{
+
+        const response =
+            await fetch(
+                API +
+                "/api/feedback/" +
+                feedbackId,
+                {
+                    method:"DELETE",
+
+                    headers:{
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body:JSON.stringify({
+
+                        student_id:
+                            Number(studentId)
+
+                    })
+                }
+            );
+
+
+        const data =
+            await response.json();
+
+
+        if(!response.ok){
+
+            throw new Error(
+                data.message ||
+                "Unable to delete feedback."
+            );
+
+        }
+
+
+        showMessage(
+            "Feedback deleted successfully.",
+            "success"
+        );
+
+
+        await loadFeedback();
+
+    }
+    catch(error){
+
+        console.error(
+            "Delete feedback error:",
+            error
+        );
+
+        showMessage(
+            error.message ||
+            "Unable to delete feedback.",
+            "error"
+        );
+
+    }
+
+}
+
+
+/* =====================================================
+   HELPERS
+===================================================== */
+
+function showMessage(
+    text,
+    type
+){
+
+    message.textContent =
+        text;
+
+    message.className =
+        type;
+
+}
+
+
+function formatDate(
+    value
+){
+
+    if(!value){
+
+        return "";
+
+    }
+
+    const date =
+        new Date(
+            value.replace(
+                " ",
+                "T"
+            )
+        );
+
+    if(
+        Number.isNaN(
+            date.getTime()
+        )
+    ){
+
+        return value;
+
+    }
+
+    return date.toLocaleString();
+
+}
+
+
+function escapeHTML(
+    value
+){
+
+    return String(
+        value ?? ""
+    )
+    .replace(
+        /&/g,
+        "&amp;"
+    )
+    .replace(
+        /</g,
+        "&lt;"
+    )
+    .replace(
+        />/g,
+        "&gt;"
+    )
+    .replace(
+        /"/g,
+        "&quot;"
+    )
+    .replace(
+        /'/g,
+        "&#039;"
+    );
+
+}
+
+
+/* =====================================================
+   START
+===================================================== */
+
+loadServices();
+
+loadFeedback();
+
+</script>
+
+</body>
+</html>

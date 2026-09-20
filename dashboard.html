@@ -1,0 +1,2409 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>QueueLess | Dashboard</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Segoe UI", Arial, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background:
+                radial-gradient(circle at 15% 15%, rgba(0, 255, 200, 0.08), transparent 28%),
+                radial-gradient(circle at 85% 20%, rgba(120, 70, 255, 0.10), transparent 30%),
+                #05070d;
+            color: #ffffff;
+            overflow-x: hidden;
+        }
+
+        /* =========================
+           SIDEBAR
+        ========================= */
+
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 250px;
+            height: 100vh;
+            padding: 28px 18px;
+            background: rgba(8, 11, 20, 0.94);
+            border-right: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 10px 0 40px rgba(0, 0, 0, 0.35);
+            z-index: 1000;
+        }
+
+        .logo {
+            padding: 5px 12px 30px;
+        }
+
+        .logo h1 {
+            font-size: 25px;
+            letter-spacing: 3px;
+            color: #ffffff;
+            text-shadow:
+                0 0 10px rgba(0, 255, 200, 0.7),
+                0 0 25px rgba(0, 255, 200, 0.25);
+        }
+
+        .logo p {
+            margin-top: 5px;
+            color: #7e899d;
+            font-size: 11px;
+            letter-spacing: 1.5px;
+        }
+
+        .user-box {
+            padding: 16px;
+            margin-bottom: 25px;
+            border-radius: 18px;
+            background: linear-gradient(
+                145deg,
+                rgba(255,255,255,0.08),
+                rgba(255,255,255,0.025)
+            );
+            border: 1px solid rgba(255,255,255,0.08);
+            box-shadow:
+                inset 0 1px rgba(255,255,255,0.06),
+                0 12px 30px rgba(0,0,0,0.25);
+        }
+
+        .user-avatar {
+            width: 43px;
+            height: 43px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #00e5b0, #2478ff);
+            color: white;
+            font-weight: 800;
+            box-shadow:
+                0 0 18px rgba(0, 229, 176, 0.35);
+            margin-bottom: 10px;
+        }
+
+        .user-name {
+            font-size: 15px;
+            font-weight: 700;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .user-id {
+            margin-top: 4px;
+            color: #7d8798;
+            font-size: 12px;
+        }
+
+        .menu {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .menu button {
+            width: 100%;
+            padding: 14px 16px;
+            border: 1px solid transparent;
+            border-radius: 14px;
+            background: transparent;
+            color: #aab2c0;
+            text-align: left;
+            cursor: pointer;
+            font-size: 14px;
+            transition: 0.25s ease;
+        }
+
+        .menu button:hover {
+            transform: translateX(5px);
+            color: white;
+            background: rgba(255,255,255,0.06);
+            border-color: rgba(255,255,255,0.08);
+        }
+
+        .menu button.active {
+            color: #ffffff;
+            background: linear-gradient(
+                135deg,
+                rgba(0,229,176,0.18),
+                rgba(36,120,255,0.12)
+            );
+            border-color: rgba(0,229,176,0.25);
+            box-shadow:
+                0 0 20px rgba(0,229,176,0.08),
+                inset 0 0 15px rgba(0,229,176,0.03);
+        }
+
+        .menu-icon {
+            display: inline-block;
+            width: 28px;
+            font-size: 17px;
+        }
+
+        .logout {
+            margin-top: auto;
+            position: absolute;
+            left: 18px;
+            right: 18px;
+            bottom: 25px;
+        }
+
+        .logout button {
+            width: 100%;
+            padding: 13px;
+            border: 1px solid rgba(255, 70, 110, 0.25);
+            border-radius: 14px;
+            background: rgba(255, 50, 90, 0.08);
+            color: #ff7897;
+            cursor: pointer;
+            transition: 0.25s ease;
+        }
+
+        .logout button:hover {
+            background: rgba(255, 50, 90, 0.18);
+            box-shadow: 0 0 22px rgba(255, 50, 90, 0.12);
+            transform: translateY(-2px);
+        }
+
+        /* =========================
+           MAIN
+        ========================= */
+
+        .main {
+            margin-left: 250px;
+            min-height: 100vh;
+            padding: 38px 45px;
+        }
+
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .welcome h2 {
+            font-size: clamp(27px, 3vw, 38px);
+            letter-spacing: -1px;
+        }
+
+        .welcome h2 span {
+            color: #00e5b0;
+            text-shadow: 0 0 18px rgba(0,229,176,0.3);
+        }
+
+        .welcome p {
+            color: #7f899c;
+            margin-top: 7px;
+            font-size: 14px;
+        }
+
+        .date-box {
+            padding: 12px 17px;
+            border-radius: 15px;
+            background: rgba(255,255,255,0.045);
+            border: 1px solid rgba(255,255,255,0.08);
+            color: #aab3c2;
+            font-size: 13px;
+        }
+
+        /* =========================
+           STAT CARDS
+        ========================= */
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 18px;
+            margin-bottom: 24px;
+        }
+
+        .stat-card {
+            min-height: 130px;
+            padding: 22px;
+            border-radius: 20px;
+            background:
+                linear-gradient(
+                    145deg,
+                    rgba(255,255,255,0.085),
+                    rgba(255,255,255,0.025)
+                );
+            border: 1px solid rgba(255,255,255,0.08);
+            box-shadow:
+                12px 12px 30px rgba(0,0,0,0.32),
+                -5px -5px 15px rgba(255,255,255,0.015),
+                inset 0 1px rgba(255,255,255,0.06);
+            transition: 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-6px);
+            border-color: rgba(0,229,176,0.25);
+            box-shadow:
+                0 15px 35px rgba(0,0,0,0.38),
+                0 0 25px rgba(0,229,176,0.08);
+        }
+
+        .stat-title {
+            color: #7e899b;
+            font-size: 12px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .stat-value {
+            margin-top: 13px;
+            font-size: 30px;
+            font-weight: 800;
+        }
+
+        .stat-sub {
+            margin-top: 6px;
+            color: #687285;
+            font-size: 11px;
+        }
+
+        /* =========================
+           ACTIVITY PANEL
+        ========================= */
+
+        .activity-card {
+            width: 100%;
+            padding: 28px;
+            border-radius: 24px;
+            background:
+                linear-gradient(
+                    145deg,
+                    rgba(255,255,255,0.075),
+                    rgba(255,255,255,0.022)
+                );
+            border: 1px solid rgba(255,255,255,0.08);
+            box-shadow:
+                15px 15px 40px rgba(0,0,0,0.35),
+                inset 0 1px rgba(255,255,255,0.06);
+            margin-bottom: 24px;
+        }
+
+        .activity-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .activity-header h3 {
+            font-size: 21px;
+        }
+
+        .activity-header p {
+            margin-top: 5px;
+            color: #747f91;
+            font-size: 13px;
+        }
+
+        .activity-total {
+            padding: 9px 14px;
+            border-radius: 12px;
+            background: rgba(0,229,176,0.08);
+            border: 1px solid rgba(0,229,176,0.15);
+            color: #00e5b0;
+            font-size: 12px;
+        }
+
+        .activity-actions {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            flex-wrap: wrap;
+            justify-content: flex-end;
+        }
+
+        .activity-nav,
+        .activity-today {
+            border: 1px solid rgba(255,255,255,0.10);
+            background: rgba(255,255,255,0.045);
+            color: #b8c1cf;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: 0.2s ease;
+        }
+
+        .activity-nav {
+            width: 34px;
+            height: 34px;
+            font-size: 22px;
+            line-height: 1;
+        }
+
+        .activity-today {
+            padding: 9px 11px;
+            font-size: 10px;
+            font-weight: 800;
+            letter-spacing: 0.7px;
+        }
+
+        .activity-nav:hover,
+        .activity-today:hover {
+            color: #ffffff;
+            border-color: rgba(0,229,176,0.35);
+            background: rgba(0,229,176,0.08);
+        }
+
+        .activity-total {
+            margin-left: 2px;
+        }
+
+        /* =========================
+           CALENDAR ACTIVITY
+        ========================= */
+
+        .heatmap-wrapper {
+            overflow-x: auto;
+            padding: 4px 2px 12px;
+            scrollbar-width: thin;
+        }
+
+        .heatmap-wrapper::-webkit-scrollbar {
+            height: 8px;
+        }
+
+        .heatmap-wrapper::-webkit-scrollbar-thumb {
+            background: rgba(0,229,176,0.25);
+            border-radius: 10px;
+        }
+
+        .calendar-heatmap {
+            min-width: 1120px;
+        }
+
+        .calendar-month-row {
+            display: grid;
+            grid-template-columns: 42px 1fr;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .month-spacer {
+            height: 22px;
+        }
+
+        .month-track {
+            position: relative;
+            height: 24px;
+        }
+
+        .month-label {
+            position: absolute;
+            top: 0;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            color: #00e5b0;
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 1px;
+            white-space: nowrap;
+        }
+
+        .calendar-grid-row {
+            display: grid;
+            grid-template-columns: 42px 1fr;
+            gap: 10px;
+        }
+
+        .day-labels {
+            display: grid;
+            grid-template-rows: repeat(7, 18px);
+            gap: 5px;
+            color: #687385;
+            font-size: 9px;
+        }
+
+        .day-label {
+            display: flex;
+            align-items: center;
+        }
+
+        .calendar-weeks {
+            display: grid;
+            grid-template-columns: repeat(27, 30px);
+            gap: 5px;
+        }
+
+        .calendar-week {
+            display: grid;
+            grid-template-rows: repeat(7, 18px);
+            gap: 5px;
+        }
+
+        /* =========================
+           DAILY ACTIVITY COLORS
+        ========================= */
+
+        .calendar-cell {
+            width: 30px;
+            height: 18px;
+            min-width: 30px;
+            min-height: 18px;
+            padding: 0 !important;
+            margin: 0 !important;
+            display: block;
+            flex: none;
+            border-radius: 4px;
+            background: #242b36 !important;
+            border: 1px solid #394351 !important;
+            transition: 0.2s ease;
+            position: relative;
+        }
+
+        .calendar-cell.empty {
+            width: 30px !important;
+            height: 18px !important;
+            min-width: 30px !important;
+            min-height: 18px !important;
+            padding: 0 !important;
+            margin: 0 !important;
+            border-radius: 4px !important;
+            background: transparent !important;
+            border: 1px solid transparent !important;
+            pointer-events: none;
+        }
+
+        .calendar-cell.future {
+            opacity: 0.38;
+            background: #242b36 !important;
+        }
+
+        /* 5–19 MINUTES */
+        .calendar-cell.level-1 {
+            background: #123f3a !important;
+            border-color: #1c7064 !important;
+        }
+
+        /* 20–39 MINUTES */
+        .calendar-cell.level-2 {
+            background: #08705f !important;
+            border-color: #12a18b !important;
+        }
+
+        /* 40–59 MINUTES */
+        .calendar-cell.level-3 {
+            background: #00b894 !important;
+            border-color: #20d9b5 !important;
+            box-shadow: 0 0 8px rgba(0,229,176,0.40) !important;
+        }
+
+        /* 60+ MINUTES */
+        .calendar-cell.level-4 {
+            background: #00e5b0 !important;
+            border-color: #7affea !important;
+            box-shadow: 0 0 12px rgba(0,229,176,0.75) !important;
+        }
+
+        /* =========================
+           LEGEND
+        ========================= */
+
+        .legend {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            gap: 7px;
+            margin-top: 18px;
+            color: #687385;
+            font-size: 10px;
+        }
+
+        .legend-box {
+            width: 12px;
+            height: 12px;
+            min-width: 12px;
+            border-radius: 3px;
+            border: 1px solid rgba(255,255,255,0.18);
+            box-sizing: border-box;
+        }
+
+        /* LESS */
+        .legend-box.less {
+            background: #242b36 !important;
+            border-color: #394351 !important;
+        }
+
+        /* 5–19 */
+        .legend-box.level-1 {
+            background: #123f3a !important;
+            border-color: #1c7064 !important;
+        }
+
+        /* 20–39 */
+        .legend-box.level-2 {
+            background: #08705f !important;
+            border-color: #12a18b !important;
+        }
+
+        /* 40–59 */
+        .legend-box.level-3 {
+            background: #00b894 !important;
+            border-color: #20d9b5 !important;
+        }
+
+        /* 60+ */
+        .legend-box.level-4 {
+            background: #00e5b0 !important;
+            border-color: #7affea !important;
+        }
+
+        .calendar-cell:not(.empty):hover {
+            transform: scale(1.25);
+            z-index: 5;
+            box-shadow: 0 0 14px rgba(0,229,176,0.5);
+        }
+
+        .calendar-note {
+            margin-top: 12px;
+            color: #687385;
+            font-size: 10px;
+        }
+
+        /* =========================
+           LOWER CARDS
+        ========================= */
+
+        .lower-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 22px;
+        }
+
+        .panel {
+            padding: 25px;
+            border-radius: 22px;
+            background:
+                linear-gradient(
+                    145deg,
+                    rgba(255,255,255,0.07),
+                    rgba(255,255,255,0.022)
+                );
+            border: 1px solid rgba(255,255,255,0.08);
+            box-shadow:
+                12px 12px 35px rgba(0,0,0,0.3),
+                inset 0 1px rgba(255,255,255,0.05);
+        }
+
+        .panel h3 {
+            font-size: 18px;
+            margin-bottom: 6px;
+        }
+
+        .panel-subtitle {
+            color: #6f7a8c;
+            font-size: 12px;
+            margin-bottom: 20px;
+        }
+
+        .queue-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            padding: 16px;
+            margin-bottom: 11px;
+            border-radius: 15px;
+            background: rgba(255,255,255,0.035);
+            border: 1px solid rgba(255,255,255,0.06);
+            transition: 0.25s ease;
+        }
+
+        .queue-item:hover {
+            transform: translateX(4px);
+            background: rgba(255,255,255,0.06);
+            border-color: rgba(0,229,176,0.18);
+        }
+
+        .queue-service {
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        .queue-number {
+            color: #788397;
+            font-size: 11px;
+            margin-top: 4px;
+        }
+
+        .queue-status {
+            padding: 6px 10px;
+            border-radius: 9px;
+            font-size: 9px;
+            font-weight: 800;
+            letter-spacing: 0.8px;
+        }
+
+        .waiting {
+            background: rgba(255,190,70,0.1);
+            color: #ffc35b;
+        }
+
+        .serving {
+            background: rgba(0,229,176,0.1);
+            color: #00e5b0;
+            box-shadow: 0 0 12px rgba(0,229,176,0.08);
+        }
+
+        .empty {
+            padding: 25px;
+            text-align: center;
+            border-radius: 15px;
+            background: rgba(255,255,255,0.025);
+            color: #687386;
+            font-size: 13px;
+        }
+
+        .activity-mini {
+            display: flex;
+            align-items: center;
+            gap: 13px;
+            padding: 14px;
+            margin-bottom: 10px;
+            border-radius: 14px;
+            background: rgba(255,255,255,0.035);
+            border: 1px solid rgba(255,255,255,0.055);
+        }
+
+        .activity-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 11px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0,229,176,0.09);
+            color: #00e5b0;
+        }
+
+        .activity-text {
+            font-size: 12px;
+            color: #aab2bf;
+        }
+
+        .activity-time {
+            color: #626d7e;
+            font-size: 10px;
+            margin-top: 3px;
+        }
+
+        /* =========================
+           RESPONSIVE
+        ========================= */
+
+        @media (max-width: 1050px) {
+
+            .stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .lower-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 800px) {
+
+            .sidebar {
+                width: 210px;
+            }
+
+            .main {
+                margin-left: 210px;
+                padding: 25px;
+            }
+
+            .stats {
+                grid-template-columns: 1fr;
+            }
+
+            .topbar {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+        }
+
+        @media (max-width: 600px) {
+
+            .sidebar {
+                position: relative;
+                width: 100%;
+                height: auto;
+            }
+
+            .logout {
+                position: static;
+                margin-top: 25px;
+            }
+
+            .main {
+                margin-left: 0;
+                padding: 20px;
+            }
+
+            .logo {
+                padding-bottom: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- =========================
+         SIDEBAR
+    ========================= -->
+
+    <aside class="sidebar">
+
+        <div class="logo">
+            <h1>QUEUELESS</h1>
+            <p>SMART QUEUE MANAGEMENT</p>
+        </div>
+
+        <div class="user-box">
+
+            <div class="user-avatar" id="userAvatar">
+                S
+            </div>
+
+            <div class="user-name" id="sidebarName">
+                Student
+            </div>
+
+            <div class="user-id" id="sidebarId">
+                College ID
+            </div>
+
+        </div>
+
+        <nav class="menu">
+
+            <button class="active" onclick="goDashboard()">
+                <span class="menu-icon">⌂</span>
+                Dashboard
+            </button>
+
+            <button onclick="goServices()">
+                <span class="menu-icon">◈</span>
+                College Services
+            </button>
+
+            <button onclick="goMyQueue()">
+                <span class="menu-icon">◈</span>
+                My Queue
+            </button>
+
+            <button onclick="goFeedback()">
+                <span class="menu-icon">★</span>
+                Feedback
+            </button>
+
+            <button onclick="goHelp()">
+                <span class="menu-icon">?</span>
+                Help
+            </button>
+
+        </nav>
+
+        <div class="logout">
+            <button onclick="logout()">
+                ⇥ &nbsp; Logout
+            </button>
+        </div>
+
+    </aside>
+
+
+    <!-- =========================
+         MAIN
+    ========================= -->
+
+    <main class="main">
+
+        <div class="topbar">
+
+            <div class="welcome">
+
+                <h2>
+                    Hello, <span id="welcomeName">Student</span> 👋
+                </h2>
+
+                <p>
+                    Welcome back. Here's your personal QueueLess activity.
+                </p>
+
+            </div>
+
+            <div class="date-box" id="currentDate">
+                Loading date...
+            </div>
+
+        </div>
+
+
+        <!-- =========================
+             PERSONAL ACTIVITY
+        ========================= -->
+
+        <section class="activity-card">
+
+            <div class="activity-header">
+
+                <div>
+
+                    <h3>
+                        Daily Activity
+                    </h3>
+
+                    <p>
+                        Your QueueLess activity over the last 6 months
+                    </p>
+
+                </div>
+
+                <div class="activity-actions">
+
+                    <button
+                        class="activity-nav"
+                        onclick="moveActivityWindow(-1)"
+                        aria-label="Previous 6 months">
+                        ‹
+                    </button>
+
+                    <button
+                        class="activity-today"
+                        onclick="goActivityToday()">
+                        TODAY
+                    </button>
+
+                    <button
+                        class="activity-nav"
+                        onclick="moveActivityWindow(1)"
+                        aria-label="Next 6 months">
+                        ›
+                    </button>
+
+                    <div
+                        class="activity-total"
+                        id="activityTotal">
+                        0 active days
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="heatmap-wrapper">
+
+                <div class="calendar-heatmap">
+
+                    <div class="calendar-month-row">
+
+                        <div class="month-spacer"></div>
+
+                        <div
+                            class="month-track"
+                            id="monthLabels">
+                        </div>
+
+                    </div>
+
+
+                    <div class="calendar-grid-row">
+
+                        <div class="day-labels">
+
+                            <div class="day-label">
+                                Mon
+                            </div>
+
+                            <div class="day-label"></div>
+
+                            <div class="day-label">
+                                Wed
+                            </div>
+
+                            <div class="day-label"></div>
+
+                            <div class="day-label">
+                                Fri
+                            </div>
+
+                            <div class="day-label"></div>
+
+                            <div class="day-label">
+                                Sun
+                            </div>
+
+                        </div>
+
+
+                        <div
+                            class="calendar-weeks"
+                            id="heatmapWeeks">
+                        </div>
+
+                    </div>
+
+
+                    <div class="calendar-note">
+                        April–September 2026 · Scroll horizontally to view all months
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="legend">
+
+                Less
+
+                <div class="legend-box less"></div>
+
+                <div class="legend-box level-1"></div>
+
+                <div class="legend-box level-2"></div>
+
+                <div class="legend-box level-3"></div>
+
+                <div class="legend-box level-4"></div>
+
+                More
+
+            </div>
+
+        </section>
+
+
+        <!-- =========================
+             LOWER PANELS
+        ========================= -->
+
+        <section class="lower-grid">
+
+
+            <!-- MY QUEUE -->
+
+            <div class="panel">
+
+                <h3>
+                    My Current Queues
+                </h3>
+
+                <div class="panel-subtitle">
+                    Your active QueueLess services
+                </div>
+
+                <div id="queueList">
+
+                    <div class="empty">
+                        Loading your queues...
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- RECENT ACTIVITY -->
+
+            <div class="panel">
+
+                <h3>
+                    Recent Activity
+                </h3>
+
+                <div class="panel-subtitle">
+                    Your latest QueueLess activity
+                </div>
+
+                <div id="recentActivity">
+
+                    <div class="empty">
+                        Loading activity...
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <!-- =========================
+         JAVASCRIPT
+    ========================= -->
+
+    <script>
+
+        const API_URL = "http://127.0.0.1:5000";
+
+
+        /* =========================
+           GET STUDENT DATA
+        ========================= */
+
+        const studentData =
+            JSON.parse(
+                localStorage.getItem("student") || "{}"
+            );
+
+        const studentId =
+            localStorage.getItem("studentId") ||
+            localStorage.getItem("student_id") ||
+            studentData.id ||
+            studentData.student_id;
+
+        const studentName =
+            localStorage.getItem("studentName") ||
+            studentData.full_name ||
+            studentData.name ||
+            "Student";
+
+        const collegeId =
+            localStorage.getItem("collegeId") ||
+            studentData.college_id ||
+            studentData.collegeId ||
+            studentId ||
+            "College ID";
+
+
+        /* =========================
+           LOGIN CHECK
+        ========================= */
+
+        if (!studentId) {
+
+            alert("Please login again.");
+
+            window.location.href = "index.html";
+
+        }
+
+
+        /* =========================
+           DISPLAY USER
+        ========================= */
+
+        document.getElementById("sidebarName").textContent =
+            studentName;
+
+        document.getElementById("welcomeName").textContent =
+            studentName;
+
+        document.getElementById("sidebarId").textContent =
+            "ID: " + collegeId;
+
+
+        const firstLetter =
+            studentName.trim().charAt(0).toUpperCase();
+
+        document.getElementById("userAvatar").textContent =
+            firstLetter;
+
+
+        /* =========================
+           DATE
+        ========================= */
+
+        function showDate() {
+
+            const now = new Date();
+
+            const options = {
+                weekday: "short",
+                day: "numeric",
+                month: "short",
+                year: "numeric"
+            };
+
+            document.getElementById("currentDate").textContent =
+                now.toLocaleDateString("en-IN", options);
+
+        }
+
+        showDate();
+
+
+        /* =========================
+           LOAD ACTIVE QUEUES
+        ========================= */
+
+        async function loadQueues() {
+
+            const list =
+                document.getElementById("queueList");
+
+            try {
+
+                const response =
+                    await fetch(
+                        API_URL +
+                        "/api/my-queues/" +
+                        studentId +
+                        "?t=" +
+                        Date.now()
+                    );
+
+                if (!response.ok) {
+                    throw new Error("Queue request failed");
+                }
+
+                const queueData =
+                    await response.json();
+
+                const queues =
+                    Array.isArray(queueData)
+                        ? queueData
+                        : (
+                            queueData.queues ||
+                            queueData.active_queues ||
+                            queueData.data ||
+                            []
+                        );
+
+
+                if (
+                    !Array.isArray(queues) ||
+                    queues.length === 0
+                ) {
+
+                    list.innerHTML = `
+                        <div class="empty">
+                            You have no active queues.
+                        </div>
+                    `;
+
+                    return;
+
+                }
+
+
+                list.innerHTML = "";
+
+
+                queues.forEach(queue => {
+
+                    const item =
+                        document.createElement("div");
+
+                    item.className =
+                        "queue-item";
+
+                    const statusClass =
+                        queue.status === "SERVING"
+                            ? "serving"
+                            : "waiting";
+
+                    item.innerHTML = `
+
+                        <div>
+
+                            <div class="queue-service">
+
+                                ${escapeHTML(
+                                    queue.service_name ||
+                                    "Service"
+                                )}
+
+                            </div>
+
+                            <div class="queue-number">
+
+                                Queue #${queue.queue_number}
+
+                                ·
+
+                                ${queue.people_ahead || 0}
+
+                                people ahead
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="queue-status ${statusClass}">
+
+                            ${escapeHTML(
+                                queue.status ||
+                                "WAITING"
+                            )}
+
+                        </div>
+
+                    `;
+
+                    list.appendChild(item);
+
+                });
+
+            }
+
+            catch (error) {
+
+                console.error(error);
+
+                list.innerHTML = `
+                    <div class="empty">
+                        Unable to load queues.
+                    </div>
+                `;
+
+            }
+
+        }
+
+
+        /* =========================
+           LOAD COMPLETED ACTIVITY
+        ========================= */
+
+        async function loadActivity() {
+
+            const recent =
+                document.getElementById(
+                    "recentActivity"
+                );
+
+            try {
+
+                const response =
+                    await fetch(
+                        API_URL +
+                        "/api/my-completed/" +
+                        studentId +
+                        "?t=" +
+                        Date.now()
+                    );
+
+                if (!response.ok) {
+                    throw new Error(
+                        "Activity request failed"
+                    );
+                }
+
+                const data =
+                    await response.json();
+
+                const queues =
+                    Array.isArray(data)
+                        ? data
+                        : (
+                            data.queues ||
+                            (
+                                data.completed
+                                    ? (
+                                        Array.isArray(
+                                            data.completed
+                                        )
+                                            ? data.completed
+                                            : [data.completed]
+                                    )
+                                    : []
+                            )
+                        );
+
+
+                if (queues.length === 0) {
+
+                    recent.innerHTML = `
+                        <div class="empty">
+                            No completed activity yet.
+                        </div>
+                    `;
+
+                    return;
+
+                }
+
+
+                recent.innerHTML = "";
+
+
+                queues
+                    .slice(0, 5)
+                    .forEach(queue => {
+
+                        const item =
+                            document.createElement(
+                                "div"
+                            );
+
+                        item.className =
+                            "activity-mini";
+
+                        item.innerHTML = `
+
+                            <div class="activity-icon">
+                                ✓
+                            </div>
+
+                            <div>
+
+                                <div class="activity-text">
+
+                                    Completed
+
+                                    <strong>
+                                        ${escapeHTML(
+                                            queue.service_name ||
+                                            "service"
+                                        )}
+                                    </strong>
+
+                                    · Queue #${queue.queue_number}
+
+                                </div>
+
+                                <div class="activity-time">
+
+                                    ${formatDate(
+                                        queue.completed_at
+                                    )}
+
+                                </div>
+
+                            </div>
+
+                        `;
+
+                        recent.appendChild(item);
+
+                    });
+
+
+                calculateTodayActivity(
+                    queues
+                );
+
+            }
+
+            catch (error) {
+
+                console.error(error);
+
+                recent.innerHTML = `
+                    <div class="empty">
+                        Activity unavailable.
+                    </div>
+                `;
+
+            }
+
+        }
+
+
+        /* =========================
+           TODAY'S ACTIVITY
+        ========================= */
+
+        function calculateTodayActivity(
+            queues
+        ) {
+
+            const today =
+                new Date()
+                    .toISOString()
+                    .slice(0, 10);
+
+            const count =
+                queues.filter(queue => {
+
+                    if (!queue.completed_at) {
+                        return false;
+                    }
+
+                    return String(
+                        queue.completed_at
+                    ).slice(0, 10) === today;
+
+                }).length;
+
+
+            const todayActivityElement =
+                document.getElementById(
+                    "todayActivity"
+                );
+
+
+            if (todayActivityElement) {
+
+                todayActivityElement.textContent =
+                    count;
+
+            }
+
+        }
+
+
+        /* =========================
+           REAL CALENDAR ACTIVITY
+        ========================= */
+
+        let activityWindowStart =
+            new Date(
+                new Date().getFullYear(),
+                new Date().getMonth() - 5,
+                1
+            );
+
+
+        async function createHeatmap() {
+
+            const container =
+                document.getElementById(
+                    "heatmapWeeks"
+                );
+
+            const monthLabels =
+                document.getElementById(
+                    "monthLabels"
+                );
+
+
+            container.innerHTML = "";
+
+            monthLabels.innerHTML = "";
+
+
+            const windowStart =
+                new Date(
+                    activityWindowStart.getFullYear(),
+                    activityWindowStart.getMonth(),
+                    1
+                );
+
+
+            const windowEnd =
+                new Date(
+                    windowStart.getFullYear(),
+                    windowStart.getMonth() + 6,
+                    0
+                );
+
+
+            const startString =
+                getLocalDateString(
+                    windowStart
+                );
+
+            const endString =
+                getLocalDateString(
+                    windowEnd
+                );
+
+
+            const activityMap = {};
+
+
+            try {
+
+                const response =
+                    await fetch(
+                        API_URL +
+                        "/api/activity/" +
+                        studentId +
+                        "?t=" +
+                        Date.now()
+                    );
+
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        "Activity request failed"
+                    );
+
+                }
+
+
+                const data =
+                    await response.json();
+
+
+                const activity =
+                    data &&
+                    typeof data.activity === "object"
+                        ? data.activity
+                        : {};
+
+
+                Object.entries(
+                    activity
+                ).forEach(
+                    ([date, minutes]) => {
+
+                        if (
+                            date < startString ||
+                            date > endString
+                        ) {
+                            return;
+                        }
+
+
+                        const totalMinutes =
+                            Number(minutes) || 0;
+
+
+                        if (
+                            totalMinutes <= 0
+                        ) {
+                            return;
+                        }
+
+
+                        let level = 1;
+
+
+                        /*
+                            PERFORMANCE:
+
+                            < 5 min
+                            = LESS / DARK
+
+                            5–19 min
+                            = LEVEL 1
+
+                            20–39 min
+                            = LEVEL 2
+
+                            40–59 min
+                            = LEVEL 3
+
+                            60+ min
+                            = LEVEL 4 / MORE
+                        */
+
+
+                        if (
+                            totalMinutes >= 60
+                        ) {
+
+                            level = 4;
+
+                        }
+
+                        else if (
+                            totalMinutes >= 40
+                        ) {
+
+                            level = 3;
+
+                        }
+
+                        else if (
+                            totalMinutes >= 20
+                        ) {
+
+                            level = 2;
+
+                        }
+
+                        else if (
+                            totalMinutes >= 5
+                        ) {
+
+                            level = 1;
+
+                        }
+
+                        else {
+
+                            level = 0;
+
+                        }
+
+
+                        activityMap[date] = {
+
+                            date: date,
+
+                            minutes:
+                                totalMinutes,
+
+                            level:
+                                level
+
+                        };
+
+                    }
+                );
+
+
+                document.getElementById(
+                    "activityTotal"
+                ).textContent =
+
+                    `${Object.keys(
+                        activityMap
+                    ).length} active days`;
+
+
+            }
+
+            catch (error) {
+
+                console.error(
+                    "Activity calendar error:",
+                    error
+                );
+
+
+                document.getElementById(
+                    "activityTotal"
+                ).textContent =
+                    "0 active days";
+
+            }
+
+
+            /* =========================
+               CALENDAR START
+            ========================= */
+
+            const firstMonday =
+                new Date(
+                    windowStart
+                );
+
+
+            const firstDay =
+                firstMonday.getDay();
+
+
+            const daysBack =
+                firstDay === 0
+                    ? 6
+                    : firstDay - 1;
+
+
+            firstMonday.setDate(
+                firstMonday.getDate() -
+                daysBack
+            );
+
+
+            /* =========================
+               CALENDAR END
+            ========================= */
+
+            const lastSunday =
+                new Date(
+                    windowEnd
+                );
+
+
+            const lastDay =
+                lastSunday.getDay();
+
+
+            const daysForward =
+                lastDay === 0
+                    ? 0
+                    : 7 - lastDay;
+
+
+            lastSunday.setDate(
+                lastSunday.getDate() +
+                daysForward
+            );
+
+
+            const totalDays =
+                Math.round(
+                    (
+                        lastSunday -
+                        firstMonday
+                    ) / 86400000
+                ) + 1;
+
+
+            const weekCount =
+                Math.ceil(
+                    totalDays / 7
+                );
+
+
+            container.style.gridTemplateColumns =
+                `repeat(${weekCount}, 30px)`;
+
+
+            /* =========================
+               MONTH LABELS
+            ========================= */
+
+            for (
+                let monthOffset = 0;
+                monthOffset < 6;
+                monthOffset++
+            ) {
+
+                const monthStart =
+                    new Date(
+                        windowStart.getFullYear(),
+                        windowStart.getMonth() +
+                        monthOffset,
+                        1
+                    );
+
+
+                const diff =
+                    Math.floor(
+                        (
+                            monthStart -
+                            firstMonday
+                        ) / 86400000
+                    );
+
+
+                const weekIndex =
+                    Math.floor(
+                        diff / 7
+                    );
+
+
+                const label =
+                    document.createElement(
+                        "div"
+                    );
+
+
+                label.className =
+                    "month-label";
+
+
+                label.textContent =
+                    monthStart
+                        .toLocaleDateString(
+                            "en-IN",
+                            {
+                                month:
+                                    "short",
+
+                                year:
+                                    "numeric"
+                            }
+                        )
+                        .toUpperCase();
+
+
+                label.style.left =
+                    `${weekIndex * 35}px`;
+
+
+                monthLabels.appendChild(
+                    label
+                );
+
+            }
+
+
+            const now =
+                new Date();
+
+
+            const todayString =
+                getLocalDateString(
+                    now
+                );
+
+
+            /* =========================
+               CREATE CALENDAR BOXES
+            ========================= */
+
+            for (
+                let week = 0;
+                week < weekCount;
+                week++
+            ) {
+
+                const weekElement =
+                    document.createElement(
+                        "div"
+                    );
+
+
+                weekElement.className =
+                    "calendar-week";
+
+
+                for (
+                    let day = 0;
+                    day < 7;
+                    day++
+                ) {
+
+                    const current =
+                        new Date(
+                            firstMonday
+                        );
+
+
+                    current.setDate(
+                        firstMonday.getDate() +
+                        week * 7 +
+                        day
+                    );
+
+
+                    const cell =
+                        document.createElement(
+                            "div"
+                        );
+
+
+                    cell.className =
+                        "calendar-cell";
+
+
+                    const dateString =
+                        getLocalDateString(
+                            current
+                        );
+
+
+                    const outside =
+                        current < windowStart ||
+                        current > windowEnd;
+
+
+                    /* =========================
+                       OUTSIDE DATE RANGE
+                    ========================= */
+
+                    if (outside) {
+
+                        cell.classList.add(
+                            "empty"
+                        );
+
+                    }
+
+
+                    /* =========================
+                       VALID DATE
+                    ========================= */
+
+                    else {
+
+                        const record =
+                            activityMap[
+                                dateString
+                            ];
+
+
+                        const minutes =
+                            record
+                                ? Number(
+                                    record.minutes ||
+                                    0
+                                )
+                                : 0;
+
+
+                        let level =
+                            record
+                                ? Number(
+                                    record.level ||
+                                    0
+                                )
+                                : 0;
+
+
+                        /*
+                            APPLY PERFORMANCE
+                            AGAIN WHEN RENDERING
+                        */
+
+                        if (
+                            !level &&
+                            minutes > 0
+                        ) {
+
+                            if (
+                                minutes >= 60
+                            ) {
+
+                                level = 4;
+
+                            }
+
+                            else if (
+                                minutes >= 40
+                            ) {
+
+                                level = 3;
+
+                            }
+
+                            else if (
+                                minutes >= 20
+                            ) {
+
+                                level = 2;
+
+                            }
+
+                            else if (
+                                minutes >= 5
+                            ) {
+
+                                level = 1;
+
+                            }
+
+                        }
+
+
+                        /* =========================
+                           COLOR LEVEL
+                        ========================= */
+
+                        if (
+                            level > 0
+                        ) {
+
+                            cell.classList.add(
+                                `level-${Math.min(
+                                    level,
+                                    4
+                                )}`
+                            );
+
+                        }
+
+
+                        /* =========================
+                           FUTURE DATE
+                        ========================= */
+
+                        if (
+                            dateString >
+                            todayString
+                        ) {
+
+                            cell.classList.add(
+                                "future"
+                            );
+
+                        }
+
+
+                        /* =========================
+                           TOOLTIP
+                        ========================= */
+
+                        const labelDate =
+                            formatCalendarDate(
+                                current
+                            );
+
+
+                        if (
+                            minutes > 0
+                        ) {
+
+                            cell.title =
+                                `${labelDate} · ${minutes} min activity`;
+
+                        }
+
+                        else {
+
+                            cell.title =
+                                `${labelDate} · No activity`;
+
+                        }
+
+
+                        /* =========================
+                           TODAY BORDER
+                        ========================= */
+
+                        if (
+                            dateString ===
+                            todayString
+                        ) {
+
+                            cell.style.outline =
+                                "1px solid rgba(0,229,176,0.75)";
+
+
+                            cell.style.outlineOffset =
+                                "2px";
+
+                        }
+
+                    }
+
+
+                    weekElement.appendChild(
+                        cell
+                    );
+
+                }
+
+
+                container.appendChild(
+                    weekElement
+                );
+
+            }
+
+
+            /* =========================
+               DATE RANGE TEXT
+            ========================= */
+
+            document.querySelector(
+                ".calendar-note"
+            ).textContent =
+
+                `${windowStart.toLocaleDateString(
+                    "en-IN",
+                    {
+                        month:
+                            "short",
+
+                        year:
+                            "numeric"
+                    }
+                )} – ${windowEnd.toLocaleDateString(
+                    "en-IN",
+                    {
+                        month:
+                            "short",
+
+                        year:
+                            "numeric"
+                    }
+                )} · Use ‹ and › to continue through your history`;
+
+        }
+
+
+        /* =========================
+           MOVE CALENDAR
+        ========================= */
+
+        function moveActivityWindow(
+            months
+        ) {
+
+            activityWindowStart =
+                new Date(
+                    activityWindowStart.getFullYear(),
+                    activityWindowStart.getMonth() +
+                    months,
+                    1
+                );
+
+
+            createHeatmap();
+
+        }
+
+
+        /* =========================
+           TODAY
+        ========================= */
+
+        function goActivityToday() {
+
+            activityWindowStart =
+                new Date(
+                    new Date().getFullYear(),
+                    new Date().getMonth() - 5,
+                    1
+                );
+
+
+            createHeatmap();
+
+        }
+
+
+        /* =========================
+           LOCAL DATE
+        ========================= */
+
+        function getLocalDateString(
+            date
+        ) {
+
+            const year =
+                date.getFullYear();
+
+
+            const month =
+                String(
+                    date.getMonth() + 1
+                ).padStart(
+                    2,
+                    "0"
+                );
+
+
+            const day =
+                String(
+                    date.getDate()
+                ).padStart(
+                    2,
+                    "0"
+                );
+
+
+            return `${year}-${month}-${day}`;
+
+        }
+
+
+        /* =========================
+           CALENDAR DATE
+        ========================= */
+
+        function formatCalendarDate(
+            date
+        ) {
+
+            return date.toLocaleDateString(
+                "en-IN",
+                {
+                    day:
+                        "numeric",
+
+                    month:
+                        "short",
+
+                    year:
+                        "numeric"
+                }
+            );
+
+        }
+
+
+        /* =========================
+           ESCAPE HTML
+        ========================= */
+
+        function escapeHTML(
+            value
+        ) {
+
+            return String(
+                value
+            )
+                .replaceAll(
+                    "&",
+                    "&amp;"
+                )
+                .replaceAll(
+                    "<",
+                    "&lt;"
+                )
+                .replaceAll(
+                    ">",
+                    "&gt;"
+                )
+                .replaceAll(
+                    '"',
+                    "&quot;"
+                )
+                .replaceAll(
+                    "'",
+                    "&#039;"
+                );
+
+        }
+
+
+        /* =========================
+           DATE FORMAT
+        ========================= */
+
+        function formatDate(
+            value
+        ) {
+
+            if (!value) {
+
+                return "Recently";
+
+            }
+
+
+            const date =
+                new Date(
+                    String(
+                        value
+                    ).replace(
+                        " ",
+                        "T"
+                    )
+                );
+
+
+            if (
+                isNaN(
+                    date.getTime()
+                )
+            ) {
+
+                return value;
+
+            }
+
+
+            return date.toLocaleString(
+                "en-IN",
+                {
+                    day:
+                        "numeric",
+
+                    month:
+                        "short",
+
+                    hour:
+                        "numeric",
+
+                    minute:
+                        "2-digit"
+                }
+            );
+
+        }
+
+
+        /* =========================
+           NAVIGATION
+        ========================= */
+
+        function goDashboard() {
+
+            window.location.href =
+                "dashboard.html";
+
+        }
+
+
+        function goServices() {
+
+            window.location.href =
+                "services.html";
+
+        }
+
+
+        function goMyQueue() {
+
+            window.location.href =
+                "myqueue.html";
+
+        }
+
+
+        function goFeedback() {
+
+            window.location.href =
+                "feedback.html";
+
+        }
+
+
+        function goHelp() {
+
+            window.location.href =
+                "help.html";
+
+        }
+
+
+        /* =========================
+           LOGOUT
+        ========================= */
+
+        function logout() {
+
+            localStorage.removeItem(
+                "student"
+            );
+
+            localStorage.removeItem(
+                "studentName"
+            );
+
+            localStorage.removeItem(
+                "studentId"
+            );
+
+            localStorage.removeItem(
+                "student_id"
+            );
+
+            localStorage.removeItem(
+                "collegeId"
+            );
+
+
+            window.location.href =
+                "index.html";
+
+        }
+
+
+        /* =========================
+           INITIAL LOAD
+        ========================= */
+
+        loadQueues();
+
+        loadActivity();
+
+        createHeatmap();
+
+
+        /* =========================
+           REFRESH
+        ========================= */
+
+        setInterval(() => {
+
+            loadQueues();
+
+            loadActivity();
+
+            createHeatmap();
+
+        }, 10000);
+
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>QueueLess - Admin Registration</title>
+
+<style>
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+body {
+    min-height: 100vh;
+    background: radial-gradient(circle at top, #1c1c1c, #080808 55%, #000);
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.container {
+    width: 100%;
+    max-width: 450px;
+}
+
+.logo {
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+.logo h1 {
+    font-size: 42px;
+    letter-spacing: 2px;
+}
+
+.logo p {
+    color: #999;
+    margin-top: 7px;
+    font-size: 14px;
+}
+
+.card {
+    background: linear-gradient(145deg, #171717, #080808);
+    border: 1px solid #333;
+    border-radius: 22px;
+    padding: 32px 30px;
+    box-shadow: 12px 12px 25px rgba(0,0,0,.8);
+}
+
+.card h2 {
+    text-align: center;
+    margin-bottom: 8px;
+}
+
+.subtitle {
+    text-align: center;
+    color: #999;
+    font-size: 13px;
+    margin-bottom: 25px;
+}
+
+.input-group {
+    margin-bottom: 18px;
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: 8px;
+    color: #ccc;
+    font-size: 14px;
+}
+
+.input-wrapper {
+    position: relative;
+}
+
+.input-icon {
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+}
+
+input {
+    width: 100%;
+    padding: 14px 15px 14px 43px;
+    border-radius: 12px;
+    border: 1px solid #333;
+    background: #0d0d0d;
+    color: white;
+    outline: none;
+    font-size: 15px;
+}
+
+input:focus {
+    border-color: #777;
+}
+
+.security-box {
+    background: #101010;
+    border: 1px solid #333;
+    border-radius: 13px;
+    padding: 14px;
+    margin-bottom: 20px;
+}
+
+.security-title {
+    font-weight: bold;
+    margin-bottom: 5px;
+    font-size: 14px;
+}
+
+.security-text {
+    color: #999;
+    font-size: 12px;
+    line-height: 1.5;
+}
+
+button {
+    width: 100%;
+    padding: 14px;
+    border-radius: 13px;
+    border: 1px solid #444;
+    background: linear-gradient(145deg, #292929, #0c0c0c);
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+button:hover {
+    transform: translateY(-2px);
+}
+
+button:disabled {
+    opacity: .6;
+}
+
+.message {
+    min-height: 24px;
+    margin-top: 15px;
+    text-align: center;
+    font-size: 14px;
+}
+
+.error {
+    color: #ff6b6b;
+}
+
+.success {
+    color: #7cff9b;
+}
+
+.links {
+    text-align: center;
+    margin-top: 22px;
+    line-height: 2;
+}
+
+.links a {
+    color: #ccc;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.links a:hover {
+    color: white;
+    text-decoration: underline;
+}
+
+@media(max-width:500px) {
+    .card {
+        padding: 28px 20px;
+    }
+
+    .logo h1 {
+        font-size: 35px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="logo">
+        <h1>QUEUELESS</h1>
+        <p>SMART QUEUE MANAGEMENT</p>
+    </div>
+
+    <div class="card">
+
+        <h2>ADMIN REGISTRATION</h2>
+
+        <p class="subtitle">
+            Create a secure administrator account
+        </p>
+
+        <form id="registerForm" novalidate>
+
+            <!-- ADMIN NAME -->
+            <div class="input-group">
+
+                <label>ADMIN NAME</label>
+
+                <div class="input-wrapper">
+
+                    <span class="input-icon">👤</span>
+
+                    <input
+                        type="text"
+                        id="adminName"
+                        name="name"
+                        placeholder="Enter Admin Name"
+                        autocomplete="name"
+                    >
+
+                </div>
+
+            </div>
+
+
+            <!-- ADMIN ID -->
+            <div class="input-group">
+
+                <label>ADMIN ID</label>
+
+                <div class="input-wrapper">
+
+                    <span class="input-icon">◉</span>
+
+                    <input
+                        type="text"
+                        id="adminId"
+                        name="admin_id"
+                        placeholder="Enter Admin ID"
+                        autocomplete="username"
+                    >
+
+                </div>
+
+            </div>
+
+
+            <!-- PASSWORD -->
+            <div class="input-group">
+
+                <label>PASSWORD</label>
+
+                <div class="input-wrapper">
+
+                    <span class="input-icon">🔒</span>
+
+                    <input
+                        type="password"
+                        id="password"
+                        name="password"
+                        placeholder="Enter Password"
+                        autocomplete="new-password"
+                    >
+
+                </div>
+
+            </div>
+
+
+            <!-- CONFIRM PASSWORD -->
+            <div class="input-group">
+
+                <label>CONFIRM PASSWORD</label>
+
+                <div class="input-wrapper">
+
+                    <span class="input-icon">🔒</span>
+
+                    <input
+                        type="password"
+                        id="confirmPassword"
+                        name="confirm_password"
+                        placeholder="Confirm Password"
+                        autocomplete="new-password"
+                    >
+
+                </div>
+
+            </div>
+
+
+            <!-- SECRET KEY -->
+            <div class="input-group">
+
+                <label>ADMIN SECRET KEY</label>
+
+                <div class="input-wrapper">
+
+                    <span class="input-icon">🔑</span>
+
+                    <input
+                        type="password"
+                        id="secretKey"
+                        name="secret_key"
+                        placeholder="Enter Admin Secret Key"
+                    >
+
+                </div>
+
+            </div>
+
+
+            <div class="security-box">
+
+                <div class="security-title">
+                    🔐 ADMIN ACCESS PROTECTED
+                </div>
+
+                <div class="security-text">
+                    A valid administrator secret key is required
+                    to create an admin account.
+                </div>
+
+            </div>
+
+
+            <button type="submit" id="registerButton">
+                CREATE ADMIN ACCOUNT
+            </button>
+
+        </form>
+
+
+        <div id="message" class="message"></div>
+
+
+        <div class="links">
+
+            <a href="admin-login.html">
+                Already have an admin account? Login
+            </a>
+
+            <br>
+
+            <a href="index.html">
+                ← Back to Student Login
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+/*
+==========================================================
+QUEUELESS ADMIN REGISTRATION
+ONLY THIS PART CONNECTS TO FLASK
+==========================================================
+*/
+
+const API_URLS = [
+    "http://127.0.0.1:5000",
+    "http://localhost:5000"
+];
+
+const form =
+    document.getElementById("registerForm");
+
+const message =
+    document.getElementById("message");
+
+const button =
+    document.getElementById("registerButton");
+
+
+function showMessage(text, type) {
+
+    message.textContent = text;
+
+    message.className =
+        "message " + type;
+}
+
+
+async function registerAdmin() {
+
+    const adminName =
+        document.getElementById("adminName")
+        .value
+        .trim();
+
+    const adminId =
+        document.getElementById("adminId")
+        .value
+        .trim();
+
+    const password =
+        document.getElementById("password")
+        .value;
+
+    const confirmPassword =
+        document.getElementById("confirmPassword")
+        .value;
+
+    const secretKey =
+        document.getElementById("secretKey")
+        .value
+        .trim();
+
+
+    /*
+    ------------------------------------------------------
+    VALIDATION
+    ------------------------------------------------------
+    */
+
+    if (
+        !adminName ||
+        !adminId ||
+        !password ||
+        !confirmPassword ||
+        !secretKey
+    ) {
+
+        showMessage(
+            "Please enter all required fields.",
+            "error"
+        );
+
+        return;
+    }
+
+
+    if (password !== confirmPassword) {
+
+        showMessage(
+            "Passwords do not match.",
+            "error"
+        );
+
+        return;
+    }
+
+
+    if (password.length < 6) {
+
+        showMessage(
+            "Password must contain at least 6 characters.",
+            "error"
+        );
+
+        return;
+    }
+
+
+    /*
+    ------------------------------------------------------
+    BUTTON
+    ------------------------------------------------------
+    */
+
+    button.disabled = true;
+
+    button.textContent =
+        "CREATING ACCOUNT...";
+
+
+    showMessage(
+        "Connecting to Flask backend...",
+        ""
+    );
+
+
+    /*
+    ------------------------------------------------------
+    DATA
+    ------------------------------------------------------
+    */
+
+    const adminData = {
+
+        full_name: adminName,
+
+        name: adminName,
+
+        admin_name: adminName,
+
+        admin_id: adminId,
+
+        password: password,
+
+        secret_key: secretKey
+
+    };
+
+
+    /*
+    ------------------------------------------------------
+    TRY BOTH LOCALHOST ADDRESSES
+    ------------------------------------------------------
+    */
+
+    let lastError = null;
+
+    let successfulResponse = null;
+
+
+    for (const api of API_URLS) {
+
+        try {
+
+            console.log(
+                "Trying Flask:",
+                api
+            );
+
+
+            const controller =
+                new AbortController();
+
+            const timeout =
+                setTimeout(
+                    () => controller.abort(),
+                    8000
+                );
+
+
+            const response =
+                await fetch(
+                    api + "/api/admin-register",
+                    {
+                        method: "POST",
+
+                        mode: "cors",
+
+                        credentials: "omit",
+
+                        headers: {
+                            "Content-Type":
+                                "application/json"
+                        },
+
+                        body:
+                            JSON.stringify(
+                                adminData
+                            ),
+
+                        signal:
+                            controller.signal
+                    }
+                );
+
+
+            clearTimeout(timeout);
+
+
+            /*
+            ------------------------------------------------
+            READ SERVER RESPONSE
+            ------------------------------------------------
+            */
+
+            let data = {};
+
+            const contentType =
+                response.headers.get(
+                    "content-type"
+                ) || "";
+
+
+            if (
+                contentType
+                .toLowerCase()
+                .includes("application/json")
+            ) {
+
+                data =
+                    await response.json();
+
+            } else {
+
+                const text =
+                    await response.text();
+
+                data = {
+                    message:
+                        text ||
+                        "Invalid server response."
+                };
+
+            }
+
+
+            console.log(
+                "Flask response:",
+                response.status,
+                data
+            );
+
+
+            /*
+            ------------------------------------------------
+            SERVER REACHED
+            ------------------------------------------------
+            */
+
+            successfulResponse = {
+                response: response,
+                data: data
+            };
+
+            break;
+
+
+        } catch (error) {
+
+            console.error(
+                "Connection failed:",
+                api,
+                error
+            );
+
+            lastError = error;
+
+        }
+
+    }
+
+
+    /*
+    ------------------------------------------------------
+    NO SERVER CONNECTION
+    ------------------------------------------------------
+    */
+
+    if (!successfulResponse) {
+
+        console.error(
+            "ALL FLASK CONNECTIONS FAILED",
+            lastError
+        );
+
+
+        showMessage(
+            "Cannot connect to Flask backend. Make sure python app.py is running.",
+            "error"
+        );
+
+
+        button.disabled = false;
+
+        button.textContent =
+            "CREATE ADMIN ACCOUNT";
+
+        return;
+    }
+
+
+    /*
+    ------------------------------------------------------
+    SERVER RESPONSE
+    ------------------------------------------------------
+    */
+
+    const response =
+        successfulResponse.response;
+
+    const data =
+        successfulResponse.data;
+
+
+    /*
+    ------------------------------------------------------
+    ERROR FROM FLASK
+    ------------------------------------------------------
+    */
+
+    if (!response.ok) {
+
+        showMessage(
+            data.message ||
+            data.error ||
+            "Admin registration failed.",
+            "error"
+        );
+
+
+        button.disabled = false;
+
+        button.textContent =
+            "CREATE ADMIN ACCOUNT";
+
+        return;
+    }
+
+
+    if (data.success === false) {
+
+        showMessage(
+            data.message ||
+            "Admin registration failed.",
+            "error"
+        );
+
+
+        button.disabled = false;
+
+        button.textContent =
+            "CREATE ADMIN ACCOUNT";
+
+        return;
+    }
+
+
+    /*
+    ------------------------------------------------------
+    SUCCESS
+    ------------------------------------------------------
+    */
+
+    showMessage(
+        data.message ||
+        "Admin account created successfully!",
+        "success"
+    );
+
+
+    form.reset();
+
+
+    setTimeout(
+        function() {
+
+            window.location.href =
+                "admin-login.html";
+
+        },
+        1200
+    );
+
+}
+
+
+/*
+==========================================================
+FORM SUBMIT
+==========================================================
+*/
+
+form.addEventListener(
+    "submit",
+    function(event) {
+
+        event.preventDefault();
+
+        registerAdmin();
+
+    }
+);
+
+</script>
+
+</body>
+</html>

@@ -1,4 +1,4 @@
-const API_URL = "http://127.0.0.1:5000";
+const API_URL = window.location.origin;
 
 const registerForm = document.getElementById("registerForm");
 const messageBox = document.getElementById("message");

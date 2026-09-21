@@ -1474,11 +1474,11 @@ def service_status(service_id):
 # START SERVER
 # =========================================================
 
+# Initialize database when Flask starts
+init_db()
+ensure_feedback_table()
+
 if __name__ == "__main__":
-
-    init_db()
-    ensure_feedback_table()
-
     app.run(
         debug=True,
         host="127.0.0.1",
